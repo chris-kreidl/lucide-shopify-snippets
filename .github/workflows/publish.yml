@@ -33,7 +33,7 @@ jobs:
         run: npm version patch --no-git-tag-version
 
       - name: Publish to npm
-        run: npm publish --access public
+        run: NODE_AUTH_TOKEN="" npm publish --access public
 
       - name: Commit version bump
         run: |
