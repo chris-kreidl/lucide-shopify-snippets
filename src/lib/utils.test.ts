@@ -1,10 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import {
-  findExactMatch,
-  findSimilar,
-  getAvailableIcons,
-  resolveIconPath,
-} from "./utils.ts";
+import { findExactMatch, findSimilar, getAvailableIcons, resolveIconPath } from "./utils.ts";
 
 describe("findExactMatch", () => {
   const icons = ["menu", "chevron-down", "arrow-right", "ArrowLeft"];
