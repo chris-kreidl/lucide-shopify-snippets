@@ -2,11 +2,12 @@
 import { program } from "commander";
 import { addIcons } from "./commands/add.ts";
 import { searchIcons } from "./commands/search.ts";
+import { version } from '../package.json';
 
 program
   .name("lucide-shopify-snippets")
   .description("Add Lucide icon snippets to your Shopify theme")
-  .version("0.1.0");
+  .version(version);
 
 program
   .command("add")
