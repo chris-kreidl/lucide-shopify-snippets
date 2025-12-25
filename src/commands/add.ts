@@ -11,6 +11,17 @@ interface AddOptions {
   force: boolean;
 }
 
+/**
+ * Convert a list of icon names into Liquid snippet files in the specified directory.
+ *
+ * Creates the target directory if missing, resolves each icon to its SVG source, generates a snippet file named with the provided prefix, skips unresolved icons (and logs up to five similar suggestions), and respects the `force` option when deciding whether to overwrite existing files. Logs progress and a summary of successes and failures.
+ *
+ * @param icons - Array of icon names to convert into snippet files
+ * @param options - Configuration for output:
+ *   - `dir`: target directory for generated snippets
+ *   - `prefix`: filename prefix for each generated snippet
+ *   - `force`: when `true`, overwrite existing files; otherwise skip existing files
+ */
 export async function addIcons(icons: string[], options: AddOptions): Promise<void> {
   const snippetsDir = join(process.cwd(), options.dir);
 
