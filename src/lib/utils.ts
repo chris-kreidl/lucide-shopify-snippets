@@ -65,10 +65,25 @@ function getPossiblePaths(): Array<string> {
   return possiblePaths;
 }
 
+/**
+ * Find an exact case-insensitive match in an array of strings.
+ *
+ * @param haystack - Array of strings to search
+ * @param needle - String to find
+ * @returns The matched string from haystack, or `null` if not found
+ */
 export function findExactMatch(haystack: Array<string>, needle: string): string | null {
   return haystack.find(name => name.toLowerCase() === needle.toLowerCase()) ?? null;
 }
 
+/**
+ * Find strings similar to the needle using Levenshtein distance.
+ *
+ * @param haystack - Array of strings to search
+ * @param needle - String to match against
+ * @param count - Maximum number of results to return (default: 5)
+ * @returns Array of similar strings (Levenshtein distance <= 2)
+ */
 export function findSimilar(haystack: Array<string>, needle: string, count = 5): Array<string> {
   return haystack.filter(name => similarity(name.toLowerCase(), needle.toLowerCase()) <= 2).slice(0, count);
 }
