@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { program } from "commander";
 import { addIcons } from "./commands/add.ts";
+import { searchIcons } from "./commands/search.ts";
 
 program
   .name("lucide-shopify-snippets")
@@ -15,5 +16,11 @@ program
   .option("-p, --prefix <prefix>", "Prefix for snippet filenames", "icon-")
   .option("-f, --force", "Overwrite output files if already exists")
   .action(addIcons);
+
+program
+  .command("search")
+  .description("Search Lucide library for icons")
+  .argument("<icon>", "Icon name to search (e.g., menu)")
+  .action(searchIcons);
 
 program.parse();

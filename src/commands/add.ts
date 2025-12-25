@@ -1,64 +1,14 @@
-import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "fs";
-import { join, dirname } from "path";
-import { fileURLToPath } from "url";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
+import { join } from "path";
 import { generateSnippet } from "../generator.ts";
 import { consola } from "consola";
 import { similarity } from "radashi";
+import { getAvailableIcons, resolveIconPath } from "../lib/utils.ts";
 
 interface AddOptions {
   dir: string;
   prefix: string;
   force: boolean;
-}
-
-function resolveIconPath(iconName: string): string | null {
-  // Try to find the lucide-static package
-  const possiblePaths = [
-    // When running from node_modules/.bin or npx
-    join(process.cwd(), "node_modules", "lucide-static", "icons", `${iconName}.svg`),
-    // When running from the package itself during development
-    join(
-      dirname(fileURLToPath(import.meta.url)),
-      "..",
-      "..",
-      "node_modules",
-      "lucide-static",
-      "icons",
-      `${iconName}.svg`,
-    ),
-  ];
-
-  for (const iconPath of possiblePaths) {
-    if (existsSync(iconPath)) {
-      return iconPath;
-    }
-  }
-
-  return null;
-}
-
-function getAvailableIcons(): string[] {
-  const possiblePaths = [
-    join(process.cwd(), "node_modules", "lucide-static", "icons"),
-    join(
-      dirname(fileURLToPath(import.meta.url)),
-      "..",
-      "..",
-      "node_modules",
-      "lucide-static",
-      "icons",
-    ),
-  ];
-
-  for (const iconsDir of possiblePaths) {
-    if (existsSync(iconsDir)) {
-      return readdirSync(iconsDir)
-        .filter((f: string) => f.endsWith(".svg"))
-        .map((f: string) => f.replace(".svg", ""));
-    }
-  }
-
-  return [];
 }
 
 export async function addIcons(icons: string[], options: AddOptions): Promise<void> {
