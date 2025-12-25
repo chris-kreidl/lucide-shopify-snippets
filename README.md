@@ -26,7 +26,11 @@ Use them in your theme:
 {% render 'icon-menu', stroke_width: 1.5 %}
 ```
 
-## Options
+## Commands
+
+### add
+
+Add icon snippets to your theme:
 
 ```bash
 npx @ckreidl/lucide-shopify-snippets add <icons...> [options]
@@ -35,4 +39,19 @@ Options:
   -d, --dir <path>      Snippets directory (default: "snippets")
   -p, --prefix <prefix> Prefix for snippet filenames (default: "icon-")
   -f, --force           Overwrite existing snippets
+```
+
+### search
+
+Search for icons by name:
+
+```bash
+npx @ckreidl/lucide-shopify-snippets search <icon>
+```
+
+Example:
+
+```bash
+npx @ckreidl/lucide-shopify-snippets search arrow
+# Found similar: arrow-up, arrow-down, arrow-left, arrow-right, ...
 ```
