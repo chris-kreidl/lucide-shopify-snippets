@@ -18,6 +18,11 @@ jobs:
 
       - uses: oven-sh/setup-bun@v2
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          registry-url: "https://registry.npmjs.org"
+
       - run: bun install --frozen-lockfile
 
       - run: bun run check
@@ -26,11 +31,6 @@ jobs:
 
       - name: Bump version
         run: npm version patch --no-git-tag-version
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          registry-url: "https://registry.npmjs.org"
 
       - name: Publish to npm
         run: npm publish --access public

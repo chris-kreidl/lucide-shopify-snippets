@@ -13,7 +13,7 @@
   "license": "MIT",
   "author": "",
   "bin": {
-    "lucide-shopify-snippets": "./dist/cli.js"
+    "lucide-shopify-snippets": "dist/cli.js"
   },
   "files": [
     "dist"
