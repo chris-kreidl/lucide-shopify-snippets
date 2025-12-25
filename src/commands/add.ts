@@ -1,9 +1,8 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 import { join } from "path";
-import { generateSnippet } from "../generator.ts";
+import { generateSnippet } from "../generator";
 import { consola } from "consola";
-import { similarity } from "radashi";
-import { getAvailableIcons, resolveIconPath } from "../lib/utils.ts";
+import { findSimilar, getAvailableIcons, resolveIconPath } from "../lib/utils";
 
 interface AddOptions {
   dir: string;
@@ -44,9 +43,7 @@ export async function addIcons(icons: string[], options: AddOptions): Promise<vo
 
       // Suggest similar icons
       const available = getAvailableIcons();
-      const similar = available
-        .filter((name) => similarity(name.toLowerCase(), iconName.toLowerCase()) <= 2)
-        .slice(0, 5);
+      const similar = findSimilar(available, iconName);
 
       if (similar.length > 0) {
         consola.log(`  Did you mean: ${similar.join(", ")}?`);

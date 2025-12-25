@@ -1,5 +1,6 @@
 import { existsSync, readdirSync } from "fs";
 import { join, dirname } from "path";
+import { similarity } from "radashi";
 import { fileURLToPath } from "url";
 
 /**
@@ -62,4 +63,12 @@ function getPossiblePaths(): Array<string> {
   ];
 
   return possiblePaths;
+}
+
+export function findExactMatch(haystack: Array<string>, needle: string): string | null {
+  return haystack.find(name => name.toLowerCase() === needle.toLowerCase()) ?? null;
+}
+
+export function findSimilar(haystack: Array<string>, needle: string, count = 5): Array<string> {
+  return haystack.filter(name => similarity(name.toLowerCase(), needle.toLowerCase()) <= 2).slice(0, count);
 }

@@ -1,5 +1,4 @@
-import { similarity } from "radashi";
-import { getAvailableIcons } from "../lib/utils";
+import { findExactMatch, findSimilar, getAvailableIcons } from "../lib/utils";
 import consola from "consola";
 
 /**
@@ -12,11 +11,9 @@ import consola from "consola";
 export function searchIcons(icon: string): void {
   const available = getAvailableIcons();
 
-  const exact = available.find((name) => name.toLowerCase() === icon.toLowerCase());
+  const exact = findExactMatch(available, icon);
 
-  const similar = available
-    .filter((name) => similarity(name.toLowerCase(), icon.toLowerCase()) <= 2)
-    .slice(0, 5);
+  const similar = findSimilar(available, icon);
 
   if (exact) {
     consola.log(`  Found exact match: ${exact}`);
