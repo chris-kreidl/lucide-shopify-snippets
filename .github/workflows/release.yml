@@ -1,13 +1,19 @@
-name: Auto Publish
+name: Release
 
 on:
-  push:
-    branches: [main]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version bump type"
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
 
 jobs:
-  publish:
-    # Only run for Dependabot commits
-    if: github.actor == 'dependabot[bot]'
+  release:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -26,7 +32,7 @@ jobs:
       - run: bun run check
 
       - name: Bump version
-        run: npm version patch --no-git-tag-version
+        run: npm version ${{ inputs.version }} --no-git-tag-version
 
       - run: bun run build
 
