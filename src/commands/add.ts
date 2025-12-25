@@ -1,9 +1,8 @@
-import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "fs";
-import { join, dirname } from "path";
-import { fileURLToPath } from "url";
-import { generateSnippet } from "../generator.ts";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
+import { join } from "path";
+import { generateSnippet } from "../generator";
 import { consola } from "consola";
-import { similarity } from "radashi";
+import { findSimilar, getAvailableIcons, resolveIconPath } from "../lib/utils";
 
 interface AddOptions {
   dir: string;
@@ -11,56 +10,17 @@ interface AddOptions {
   force: boolean;
 }
 
-function resolveIconPath(iconName: string): string | null {
-  // Try to find the lucide-static package
-  const possiblePaths = [
-    // When running from node_modules/.bin or npx
-    join(process.cwd(), "node_modules", "lucide-static", "icons", `${iconName}.svg`),
-    // When running from the package itself during development
-    join(
-      dirname(fileURLToPath(import.meta.url)),
-      "..",
-      "..",
-      "node_modules",
-      "lucide-static",
-      "icons",
-      `${iconName}.svg`,
-    ),
-  ];
-
-  for (const iconPath of possiblePaths) {
-    if (existsSync(iconPath)) {
-      return iconPath;
-    }
-  }
-
-  return null;
-}
-
-function getAvailableIcons(): string[] {
-  const possiblePaths = [
-    join(process.cwd(), "node_modules", "lucide-static", "icons"),
-    join(
-      dirname(fileURLToPath(import.meta.url)),
-      "..",
-      "..",
-      "node_modules",
-      "lucide-static",
-      "icons",
-    ),
-  ];
-
-  for (const iconsDir of possiblePaths) {
-    if (existsSync(iconsDir)) {
-      return readdirSync(iconsDir)
-        .filter((f: string) => f.endsWith(".svg"))
-        .map((f: string) => f.replace(".svg", ""));
-    }
-  }
-
-  return [];
-}
-
+/**
+ * Convert a list of icon names into Liquid snippet files in the specified directory.
+ *
+ * Creates the target directory if missing, resolves each icon to its SVG source, generates a snippet file named with the provided prefix, skips unresolved icons (and logs up to five similar suggestions), and respects the `force` option when deciding whether to overwrite existing files. Logs progress and a summary of successes and failures.
+ *
+ * @param icons - Array of icon names to convert into snippet files
+ * @param options - Configuration for output:
+ *   - `dir`: target directory for generated snippets
+ *   - `prefix`: filename prefix for each generated snippet
+ *   - `force`: when `true`, overwrite existing files; otherwise skip existing files
+ */
 export async function addIcons(icons: string[], options: AddOptions): Promise<void> {
   const snippetsDir = join(process.cwd(), options.dir);
 
@@ -83,9 +43,7 @@ export async function addIcons(icons: string[], options: AddOptions): Promise<vo
 
       // Suggest similar icons
       const available = getAvailableIcons();
-      const similar = available
-        .filter((name) => similarity(name.toLowerCase(), iconName.toLowerCase()) <= 2)
-        .slice(0, 5);
+      const similar = findSimilar(available, iconName);
 
       if (similar.length > 0) {
         consola.log(`  Did you mean: ${similar.join(", ")}?`);
