@@ -1,7 +1,7 @@
 import { existsSync, readdirSync } from "fs";
-import { join, dirname } from "path";
+import { createRequire } from "node:module";
+import { dirname, join } from "path";
 import { similarity } from "radashi";
-import { fileURLToPath } from "url";
 
 /**
  * Locate the filesystem path of an SVG for a given lucide icon name.
@@ -10,59 +10,43 @@ import { fileURLToPath } from "url";
  * @returns The filesystem path to the first matching SVG file, or `null` if none is found
  */
 export function resolveIconPath(iconName: string): string | null {
-  // Try to find the lucide-static package
-  const possiblePaths = getPossiblePaths().map((dir) => join(dir, `${iconName}.svg`));
+  const iconsDir = getLucideIconsDir();
+  if (!iconsDir) return null;
 
-  for (const iconPath of possiblePaths) {
-    if (existsSync(iconPath)) {
-      return iconPath;
-    }
-  }
-
-  return null;
+  const iconPath = join(iconsDir, `${iconName}.svg`);
+  return existsSync(iconPath) ? iconPath : null;
 }
 
 /**
- * List available lucide-static icon names by scanning configured icon directories.
+ * List available lucide-static icon names.
  *
- * Reads the first existing icons directory and returns the names of files ending with `.svg`
- * with the `.svg` extension removed. If no icons directory is present, returns an empty array.
- *
- * @returns An array of available icon names (SVG filenames without the `.svg` extension), or an empty array if none are found.
+ * @returns An array of icon names (without `.svg` extension), or empty array if not found
  */
 export function getAvailableIcons(): string[] {
-  const possiblePaths = getPossiblePaths();
+  const iconsDir = getLucideIconsDir();
+  if (!iconsDir || !existsSync(iconsDir)) return [];
 
-  for (const iconsDir of possiblePaths) {
-    if (existsSync(iconsDir)) {
-      return readdirSync(iconsDir)
-        .filter((f) => f.endsWith(".svg"))
-        .map((f) => f.replace(".svg", ""));
-    }
-  }
-
-  return [];
+  return readdirSync(iconsDir)
+    .filter((f) => f.endsWith(".svg"))
+    .map((f) => f.replace(".svg", ""));
 }
 
 /**
- * Candidate filesystem paths where lucide-static SVG icons may be installed.
+ * Resolve the lucide-static icons directory path.
  *
- * @returns An array of absolute directory paths to search for lucide-static icons, ordered by preference.
+ * Uses require.resolve to find the package location, which works correctly
+ * when the CLI is installed via npx or as a dependency.
+ *
+ * @returns The absolute path to the lucide-static icons directory, or `null` if not found
  */
-function getPossiblePaths(): Array<string> {
-  const possiblePaths = [
-    join(process.cwd(), "node_modules", "lucide-static", "icons"),
-    join(
-      dirname(fileURLToPath(import.meta.url)),
-      "..",
-      "..",
-      "node_modules",
-      "lucide-static",
-      "icons",
-    ),
-  ];
-
-  return possiblePaths;
+function getLucideIconsDir(): string | null {
+  try {
+    const require = createRequire(import.meta.url);
+    const lucidePackageJson = require.resolve("lucide-static/package.json");
+    return join(dirname(lucidePackageJson), "icons");
+  } catch {
+    return null;
+  }
 }
 
 /**
