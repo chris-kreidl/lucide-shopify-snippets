@@ -4,20 +4,7 @@ import { fileURLToPath } from "url";
 
 export function resolveIconPath(iconName: string): string | null {
   // Try to find the lucide-static package
-  const possiblePaths = [
-    // When running from node_modules/.bin or npx
-    join(process.cwd(), "node_modules", "lucide-static", "icons", `${iconName}.svg`),
-    // When running from the package itself during development
-    join(
-      dirname(fileURLToPath(import.meta.url)),
-      "..",
-      "..",
-      "node_modules",
-      "lucide-static",
-      "icons",
-      `${iconName}.svg`,
-    ),
-  ];
+  const possiblePaths = getPossiblePaths().map((dir) => join(dir, `${iconName}.svg`));
 
   for (const iconPath of possiblePaths) {
     if (existsSync(iconPath)) {
@@ -29,6 +16,20 @@ export function resolveIconPath(iconName: string): string | null {
 }
 
 export function getAvailableIcons(): string[] {
+  const possiblePaths = getPossiblePaths();
+
+  for (const iconsDir of possiblePaths) {
+    if (existsSync(iconsDir)) {
+      return readdirSync(iconsDir)
+        .filter((f) => f.endsWith(".svg"))
+        .map((f) => f.replace(".svg", ""));
+    }
+  }
+
+  return [];
+}
+
+function getPossiblePaths(): Array<string> {
   const possiblePaths = [
     join(process.cwd(), "node_modules", "lucide-static", "icons"),
     join(
@@ -41,13 +42,5 @@ export function getAvailableIcons(): string[] {
     ),
   ];
 
-  for (const iconsDir of possiblePaths) {
-    if (existsSync(iconsDir)) {
-      return readdirSync(iconsDir)
-        .filter((f) => f.endsWith(".svg"))
-        .map((f) => f.replace(".svg", ""));
-    }
-  }
-
-  return [];
+  return possiblePaths;
 }
