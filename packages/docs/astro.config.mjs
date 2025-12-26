@@ -11,7 +11,7 @@ export default defineConfig({
         src: '~/assets/logo.svg'
       },
       social: {
-        github: "https://github.com/ckreidl/lucide-shopify-snippets",
+        github: "https://github.com/chris-kreidl/lucide-shopify-snippets",
       },
       sidebar: [
         {

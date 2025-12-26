@@ -10,7 +10,7 @@ npx @ckreidl/lucide-shopify-snippets add menu chevron-down arrow-right
 
 This creates Liquid snippets in your `snippets` directory:
 
-```
+```text
 snippets/
   icon-menu.liquid
   icon-chevron-down.liquid
