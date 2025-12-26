@@ -17,6 +17,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    defaults:
+      run:
+        working-directory: packages/cli
     steps:
       - uses: actions/checkout@v6
 
@@ -27,7 +30,9 @@ jobs:
           node-version: "24"
           registry-url: "https://registry.npmjs.org"
 
-      - run: bun install --frozen-lockfile
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+        working-directory: .
 
       - run: bun run check
 
@@ -47,7 +52,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add package.json
-          git commit -m "chore: release v${VERSION} [skip ci]"
-          git tag "v${VERSION}"
+          git commit -m "chore: release cli v${VERSION} [skip ci]"
+          git tag "cli-v${VERSION}"
           git push
           git push --tags

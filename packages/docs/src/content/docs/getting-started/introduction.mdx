@@ -1,0 +1,32 @@
+---
+title: Introduction
+description: Add Lucide icon snippets to your Shopify theme
+---
+import { FileTree, Code } from '@astrojs/starlight/components';
+
+**Lucide Shopify Snippets** is a CLI tool that generates Shopify Liquid snippets for [Lucide](https://lucide.dev) icons.
+
+## Why?
+
+Shopify themes don't have a built-in way to use icon libraries. This tool generates Liquid snippets that render Lucide icons as inline SVGs, with support for:
+
+- **Customizable size** — Set width and height via Liquid parameters
+- **CSS classes** — Add Tailwind or custom classes
+- **Stroke width** — Adjust line thickness
+
+## Quick Start
+
+<Code lang="bash" code="npx @ckreidl/lucide-shopify-snippets add menu chevron-down" />
+
+This creates snippets in your `snippets/` directory:
+
+<FileTree>
+- snippets
+  - icon-menu.liquid
+  - icon-chevron-down.liquid
+</FileTree>
+
+Use them in your theme:
+
+<Code lang="liquid" code="{% render 'icon-menu' %}
+{% render 'icon-menu', size: 32, class: 'text-primary' %}" />
