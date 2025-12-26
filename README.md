@@ -1,57 +1,38 @@
-# @ckreidl/lucide-shopify-snippets
+# Lucide Shopify Snippets
 
 Add [Lucide](https://lucide.dev) icon snippets to your Shopify theme.
 
-## Usage
+## Packages
+
+| Package | Description |
+|---------|-------------|
+| [@ckreidl/lucide-shopify-snippets](./packages/cli) | CLI tool |
+| [docs](./packages/docs) | Documentation site |
+
+## Quick Start
 
 ```bash
-npx @ckreidl/lucide-shopify-snippets add menu chevron-down arrow-right
+npx @ckreidl/lucide-shopify-snippets add menu chevron-down
 ```
 
-This creates Liquid snippets in your `snippets` directory:
+See the [CLI README](./packages/cli/README.md) for full usage.
 
-```
-snippets/
-  icon-menu.liquid
-  icon-chevron-down.liquid
-  icon-arrow-right.liquid
-```
-
-Use them in your theme:
-
-```liquid
-{% render 'icon-menu' %}
-{% render 'icon-menu', size: 32 %}
-{% render 'icon-menu', class: 'text-primary' %}
-{% render 'icon-menu', stroke_width: 1.5 %}
-```
-
-## Commands
-
-### add
-
-Add icon snippets to your theme:
+## Development
 
 ```bash
-npx @ckreidl/lucide-shopify-snippets add <icons...> [options]
-
-Options:
-  -d, --dir <path>      Snippets directory (default: "snippets")
-  -p, --prefix <prefix> Prefix for snippet filenames (default: "icon-")
-  -f, --force           Overwrite existing snippets
+bun install
 ```
 
-### search
-
-Search for icons by name:
+### CLI
 
 ```bash
-npx @ckreidl/lucide-shopify-snippets search <icon>
+cd packages/cli
+bun run dev
 ```
 
-Example:
+### Docs
 
 ```bash
-npx @ckreidl/lucide-shopify-snippets search arrow
-# Found similar: arrow-up, arrow-down, arrow-left, arrow-right, ...
+cd packages/docs
+bun run dev
 ```

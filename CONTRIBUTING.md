@@ -6,41 +6,56 @@
 bun install
 ```
 
+## Packages
+
+| Package | Path | Description |
+|---------|------|-------------|
+| CLI | `packages/cli` | The npm package |
+| Docs | `packages/docs` | Documentation site |
+
 ## Development
 
+### CLI
+
 ```bash
+cd packages/cli
+
 # Run CLI directly
 bun run src/cli.ts add menu
 
 # Watch mode
 bun run dev
+
+# Run tests
+bun test
+
+# Build
+bun run build
 ```
 
-## Scripts
+### Docs
+
+```bash
+cd packages/docs
+
+# Dev server
+bun run dev
+
+# Build
+bun run build
+```
+
+## Scripts (root)
 
 | Command | Description |
 |---------|-------------|
-| `bun run build` | Build for npm distribution |
-| `bun run check` | Run format, lint, and typecheck |
+| `bun run build` | Build all packages |
+| `bun run check` | Run checks on all packages |
 | `bun run format` | Format code |
 | `bun test` | Run tests |
 
-## Project Structure
-
-```
-src/
-  cli.ts              # CLI entry point
-  generator.ts        # Liquid snippet generator
-  commands/
-    add.ts            # Add command
-    search.ts         # Search command
-  lib/
-    utils.ts          # Shared utilities
-    utils.test.ts     # Unit tests
-```
-
 ## Guidelines
 
-- Use Node.js `fs` module instead of Bun-specific APIs (e.g., `Bun.file()`) since the CLI is distributed via npm
+- Use Node.js `fs` module in CLI code (not Bun-specific APIs) for npm compatibility
 - Run `bun run check` before committing
-- Add tests for new utilities in `src/lib/`
+- Add tests for new utilities in `packages/cli/src/lib/`

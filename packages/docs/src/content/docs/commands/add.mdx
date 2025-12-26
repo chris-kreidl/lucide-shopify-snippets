@@ -1,0 +1,61 @@
+---
+title: add
+description: Add icon snippets to your Shopify theme
+---
+import { Code } from '@astrojs/starlight/components';
+
+The `add` command generates Liquid snippet files for the specified icons.
+
+## Usage
+
+<Code lang="bash" code="npx @ckreidl/lucide-shopify-snippets add <icons...> [options]" />
+
+## Arguments
+
+| Argument | Description |
+|----------|-------------|
+| `icons` | One or more icon names (e.g., `menu`, `chevron-down`) |
+
+## Options
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `-d, --dir <path>` | Output directory | `snippets` |
+| `-p, --prefix <prefix>` | Filename prefix | `icon-` |
+| `-f, --force` | Overwrite existing files | `false` |
+
+## Examples
+
+Add a single icon:
+
+<Code lang="bash" code="npx @ckreidl/lucide-shopify-snippets add menu" />
+
+Add multiple icons:
+
+<Code lang="bash" code="npx @ckreidl/lucide-shopify-snippets add menu chevron-down arrow-right" />
+
+Custom output directory:
+
+<Code lang="bash" code="npx @ckreidl/lucide-shopify-snippets add menu --dir theme/snippets" />
+
+Custom prefix:
+
+<Code lang="bash" code="npx @ckreidl/lucide-shopify-snippets add menu --prefix lucide-
+# Creates: lucide-menu.liquid" />
+
+## Generated Snippet
+
+Each snippet supports the following Liquid parameters:
+
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `size` | Width and height in pixels | `24` |
+| `class` | Additional CSS classes | — |
+| `stroke_width` | SVG stroke width | `2` |
+
+<Code lang="liquid" code="
+{% render 'icon-menu' %}
+{% render 'icon-menu', size: 32 %}
+{% render 'icon-menu', class: 'w-6 h-6 text-gray-500' %}
+{% render 'icon-menu', stroke_width: 1.5 %}
+" />

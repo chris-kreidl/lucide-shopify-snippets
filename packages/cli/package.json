@@ -1,0 +1,42 @@
+{
+  "name": "@ckreidl/lucide-shopify-snippets",
+  "version": "0.1.3",
+  "description": "CLI to add Lucide icon snippets to Shopify themes",
+  "keywords": [
+    "cli",
+    "icons",
+    "liquid",
+    "lucide",
+    "shopify",
+    "snippets"
+  ],
+  "license": "MIT",
+  "author": "",
+  "bin": {
+    "lucide-shopify-snippets": "dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "scripts": {
+    "build": "bun scripts/build.ts",
+    "dev": "bun run --watch src/cli.ts",
+    "format": "oxfmt --write",
+    "format:check": "oxfmt --check",
+    "lint": "oxlint --type-aware",
+    "typecheck": "tsc --noEmit",
+    "check": "bun run format:check && bun run lint && bun run typecheck",
+    "prepublishOnly": "bun run check"
+  },
+  "dependencies": {
+    "commander": "^14.0.2",
+    "consola": "^3.4.2",
+    "lucide-static": "latest",
+    "radashi": "^12.7.1"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/node": "^22.19.3"
+  }
+}
