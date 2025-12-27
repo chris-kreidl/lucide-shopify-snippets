@@ -8,7 +8,7 @@ const mockReadFileSync = mock(
 );
 const mockWriteFileSync = mock((_path: string, _content: string) => undefined);
 
-mock.module("fs", () => ({
+void mock.module("fs", () => ({
   existsSync: mockExistsSync,
   mkdirSync: mockMkdirSync,
   readFileSync: mockReadFileSync,
@@ -20,7 +20,7 @@ const mockResolveIconPath = mock((_name: string): string | null => "/fake/path/m
 const mockGetAvailableIcons = mock((): string[] => ["menu", "arrow-right", "chevron-down"]);
 const mockFindSimilar = mock((_haystack: string[], _needle: string): string[] => ["menu"]);
 
-mock.module("../lib/utils", () => ({
+void mock.module("../lib/utils", () => ({
   resolveIconPath: mockResolveIconPath,
   getAvailableIcons: mockGetAvailableIcons,
   findSimilar: mockFindSimilar,
@@ -30,7 +30,7 @@ mock.module("../lib/utils", () => ({
 const mockConsolaLog = mock((..._args: unknown[]) => {});
 const mockConsolaError = mock((..._args: unknown[]) => {});
 
-mock.module("consola", () => ({
+void mock.module("consola", () => ({
   consola: {
     log: mockConsolaLog,
     error: mockConsolaError,
