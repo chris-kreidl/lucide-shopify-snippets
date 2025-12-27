@@ -14,12 +14,21 @@ describe("findExactMatch", () => {
     expect(findExactMatch(icons, "arrowleft")).toBe("ArrowLeft");
   });
 
+  test("matches hyphenated names", () => {
+    expect(findExactMatch(icons, "chevron-down")).toBe("chevron-down");
+    expect(findExactMatch(icons, "CHEVRON-DOWN")).toBe("chevron-down");
+  });
+
   test("returns null when no match", () => {
     expect(findExactMatch(icons, "nonexistent")).toBeNull();
   });
 
   test("returns null for empty haystack", () => {
     expect(findExactMatch([], "menu")).toBeNull();
+  });
+
+  test("returns null for empty needle", () => {
+    expect(findExactMatch(icons, "")).toBeNull();
   });
 });
 
@@ -61,6 +70,22 @@ describe("findSimilar", () => {
   test("returns empty array for empty haystack", () => {
     expect(findSimilar([], "menu")).toEqual([]);
   });
+
+  test("handles empty needle by matching everything", () => {
+    const similar = findSimilar(icons, "", 3);
+    expect(similar.length).toBe(3);
+  });
+
+  test("handles single character needle", () => {
+    const similar = findSimilar(icons, "m", 10);
+    expect(similar).toContain("menu");
+    expect(similar).toContain("menus");
+  });
+
+  test("handles needle longer than haystack items", () => {
+    const similar = findSimilar(icons, "this-is-a-very-long-search-term");
+    expect(similar).toEqual([]);
+  });
 });
 
 describe("resolveIconPath", () => {
@@ -72,6 +97,20 @@ describe("resolveIconPath", () => {
 
   test("returns null for nonexistent icon", () => {
     expect(resolveIconPath("this-icon-does-not-exist-12345")).toBeNull();
+  });
+
+  test("returns null for empty string", () => {
+    expect(resolveIconPath("")).toBeNull();
+  });
+
+  test("returns null for path traversal attempts", () => {
+    expect(resolveIconPath("../package")).toBeNull();
+    expect(resolveIconPath("../../etc/passwd")).toBeNull();
+  });
+
+  test("returns null for names with special characters", () => {
+    expect(resolveIconPath("menu<script>")).toBeNull();
+    expect(resolveIconPath("menu;rm -rf")).toBeNull();
   });
 });
 
