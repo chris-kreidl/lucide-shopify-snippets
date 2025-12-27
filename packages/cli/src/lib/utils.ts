@@ -61,15 +61,27 @@ export function findExactMatch(haystack: Array<string>, needle: string): string 
 }
 
 /**
- * Find strings similar to the needle using Levenshtein distance.
+ * Find strings similar to the needle using substring and Levenshtein matching.
+ *
+ * Returns substring matches first (e.g., "arrow" matches "arrow-right"),
+ * then fuzzy matches for typos (e.g., "arrwo" matches "arrow").
  *
  * @param haystack - Array of strings to search
  * @param needle - String to match against
  * @param count - Maximum number of results to return (default: 5)
- * @returns Array of similar strings (Levenshtein distance <= 2)
+ * @returns Array of similar strings
  */
 export function findSimilar(haystack: Array<string>, needle: string, count = 5): Array<string> {
-  return haystack
-    .filter((name) => similarity(name.toLowerCase(), needle.toLowerCase()) <= 2)
-    .slice(0, count);
+  const n = needle.toLowerCase();
+
+  // Substring matches first (most relevant)
+  const substringMatches = haystack.filter((name) => name.toLowerCase().includes(n));
+
+  // Fuzzy matches for typos (excluding already matched)
+  const fuzzyMatches = haystack.filter(
+    (name) =>
+      !substringMatches.includes(name) && similarity(name.toLowerCase(), n) <= 2,
+  );
+
+  return [...substringMatches, ...fuzzyMatches].slice(0, count);
 }

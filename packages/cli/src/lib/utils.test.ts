@@ -26,9 +26,21 @@ describe("findExactMatch", () => {
 describe("findSimilar", () => {
   const icons = ["menu", "menus", "chevron-down", "chevron-up", "arrow-right", "arrow-left"];
 
-  test("finds similar icons within default threshold", () => {
+  test("finds substring matches", () => {
+    const similar = findSimilar(icons, "arrow");
+    expect(similar).toContain("arrow-right");
+    expect(similar).toContain("arrow-left");
+  });
+
+  test("finds fuzzy matches for typos", () => {
     const similar = findSimilar(icons, "manu");
     expect(similar).toContain("menu");
+  });
+
+  test("prioritizes substring matches over fuzzy matches", () => {
+    const similar = findSimilar(icons, "menu");
+    expect(similar[0]).toBe("menu");
+    expect(similar[1]).toBe("menus");
   });
 
   test("respects count limit", () => {
@@ -37,8 +49,8 @@ describe("findSimilar", () => {
   });
 
   test("is case-insensitive", () => {
-    const similar = findSimilar(icons, "MENU");
-    expect(similar).toContain("menu");
+    const similar = findSimilar(icons, "ARROW");
+    expect(similar).toContain("arrow-right");
   });
 
   test("returns empty array when nothing similar", () => {
