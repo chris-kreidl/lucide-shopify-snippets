@@ -79,8 +79,7 @@ export function findSimilar(haystack: Array<string>, needle: string, count = 5):
 
   // Fuzzy matches for typos (excluding already matched)
   const fuzzyMatches = haystack.filter(
-    (name) =>
-      !substringMatches.includes(name) && similarity(name.toLowerCase(), n) <= 2,
+    (name) => !substringMatches.includes(name) && similarity(name.toLowerCase(), n) <= 2,
   );
 
   return [...substringMatches, ...fuzzyMatches].slice(0, count);

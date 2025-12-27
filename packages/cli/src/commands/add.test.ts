@@ -3,7 +3,9 @@ import { beforeEach, describe, expect, mock, test } from "bun:test";
 // Mock fs module
 const mockExistsSync = mock((_path: string) => false);
 const mockMkdirSync = mock((_path: string, _options?: object) => undefined);
-const mockReadFileSync = mock((_path: string, _encoding?: string) => '<svg><path d="M4 5h16" /></svg>');
+const mockReadFileSync = mock(
+  (_path: string, _encoding?: string) => '<svg><path d="M4 5h16" /></svg>',
+);
 const mockWriteFileSync = mock((_path: string, _content: string) => undefined);
 
 mock.module("fs", () => ({

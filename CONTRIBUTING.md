@@ -8,10 +8,10 @@ bun install
 
 ## Packages
 
-| Package | Path | Description |
-|---------|------|-------------|
-| CLI | `packages/cli` | The npm package |
-| Docs | `packages/docs` | Documentation site |
+| Package | Path            | Description        |
+| ------- | --------------- | ------------------ |
+| CLI     | `packages/cli`  | The npm package    |
+| Docs    | `packages/docs` | Documentation site |
 
 ## Development
 
@@ -47,12 +47,12 @@ bun run build
 
 ## Scripts (root)
 
-| Command | Description |
-|---------|-------------|
-| `bun run build` | Build all packages |
-| `bun run check` | Run checks on all packages |
-| `bun run format` | Format code |
-| `bun test` | Run tests |
+| Command          | Description                |
+| ---------------- | -------------------------- |
+| `bun run build`  | Build all packages         |
+| `bun run check`  | Run checks on all packages |
+| `bun run format` | Format code                |
+| `bun test`       | Run tests                  |
 
 ## Guidelines
 

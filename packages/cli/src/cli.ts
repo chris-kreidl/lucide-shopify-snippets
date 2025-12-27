@@ -2,7 +2,7 @@
 import { program } from "commander";
 import { addIcons } from "./commands/add.ts";
 import { searchIcons } from "./commands/search.ts";
-import { version } from '../package.json';
+import { version } from "../package.json";
 
 program
   .name("lucide-shopify-snippets")

@@ -8,7 +8,7 @@ export default defineConfig({
     starlight({
       title: "Lucide Shopify Snippets",
       logo: {
-        src: '~/assets/logo.svg'
+        src: "~/assets/logo.svg",
       },
       social: {
         github: "https://github.com/chris-kreidl/lucide-shopify-snippets",

@@ -2,6 +2,7 @@
 title: add
 description: Add icon snippets to your Shopify theme
 ---
+
 import { Code } from '@astrojs/starlight/components';
 
 The `add` command generates Liquid snippet files for the specified icons.
@@ -12,17 +13,17 @@ The `add` command generates Liquid snippet files for the specified icons.
 
 ## Arguments
 
-| Argument | Description |
-|----------|-------------|
-| `icons` | One or more icon names (e.g., `menu`, `chevron-down`) |
+| Argument | Description                                           |
+| -------- | ----------------------------------------------------- |
+| `icons`  | One or more icon names (e.g., `menu`, `chevron-down`) |
 
 ## Options
 
-| Option | Description | Default |
-|--------|-------------|---------|
-| `-d, --dir <path>` | Output directory | `snippets` |
-| `-p, --prefix <prefix>` | Filename prefix | `icon-` |
-| `-f, --force` | Overwrite existing files | `false` |
+| Option                  | Description              | Default    |
+| ----------------------- | ------------------------ | ---------- |
+| `-d, --dir <path>`      | Output directory         | `snippets` |
+| `-p, --prefix <prefix>` | Filename prefix          | `icon-`    |
+| `-f, --force`           | Overwrite existing files | `false`    |
 
 ## Examples
 
@@ -47,11 +48,11 @@ Custom prefix:
 
 Each snippet supports the following Liquid parameters:
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `size` | Width and height in pixels | `24` |
-| `class` | Additional CSS classes | — |
-| `stroke_width` | SVG stroke width | `2` |
+| Parameter      | Description                | Default |
+| -------------- | -------------------------- | ------- |
+| `size`         | Width and height in pixels | `24`    |
+| `class`        | Additional CSS classes     | —       |
+| `stroke_width` | SVG stroke width           | `2`     |
 
 <Code lang="liquid" code="
 {% render 'icon-menu' %}

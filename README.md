@@ -4,10 +4,10 @@ Add [Lucide](https://lucide.dev) icon snippets to your Shopify theme.
 
 ## Packages
 
-| Package | Description |
-|---------|-------------|
-| [@ckreidl/lucide-shopify-snippets](./packages/cli) | CLI tool |
-| [docs](./packages/docs) | Documentation site |
+| Package                                            | Description        |
+| -------------------------------------------------- | ------------------ |
+| [@ckreidl/lucide-shopify-snippets](./packages/cli) | CLI tool           |
+| [docs](./packages/docs)                            | Documentation site |
 
 ## Quick Start
 
