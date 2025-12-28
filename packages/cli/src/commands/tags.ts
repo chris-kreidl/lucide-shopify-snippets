@@ -15,6 +15,6 @@ export function listTags() {
   consola.log(`  Found the following tags:`);
   tags.forEach((tag) => {
     const icons = findIconsByTag(tag, repo);
-    consola.log(`    * ${tag} [${icons?.length || 0} icons]`);
+    consola.log(`    * ${tag} [${icons?.length || 0} icon${icons?.length === 1 ? '' : 's'}]`);
   });
 }
