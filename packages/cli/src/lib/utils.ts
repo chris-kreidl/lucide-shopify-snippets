@@ -92,16 +92,11 @@ type IconsTagMap = {
 };
 
 /**
- * Find icons matching specified tag
+ * Resolve the path to Lucide's `tags.json`
  *
- * Returns array of string names that match the requested tag
- *
- * @param term - string to search tags against
- * @returns Array of strings or `undefined` if tags can't be loaded.
+ * @returns The absolute path to tags.json, or undefined if it can't find the directory
  */
-export function findIconsByTag(term: string): Array<string> | undefined {
-  let repo: IconsTagMap;
-
+function resolveTagsPath(): string | undefined {
   const iconsDir = getLucideIconsDir();
 
   if (!iconsDir) {
@@ -110,6 +105,24 @@ export function findIconsByTag(term: string): Array<string> | undefined {
   }
 
   const repoPath = join(iconsDir, "../tags.json");
+
+  return repoPath;
+}
+
+/**
+ * Load and parse Lucide's tags.json into a map of icon names to their tag arrays.
+ *
+ * @returns An IconsTagMap mapping icon names to arrays of tag strings, or `undefined` if the tags file cannot be resolved, read, or parsed
+ */
+export function parseIconTagMap(): IconsTagMap | undefined {
+  let repo: IconsTagMap;
+
+  const repoPath = resolveTagsPath();
+  if (!repoPath) {
+    consola.error("  Cannot resolve tags path");
+    return;
+  }
+
   let rawRepo: string;
 
   try {
@@ -149,6 +162,26 @@ export function findIconsByTag(term: string): Array<string> | undefined {
 
   if (!entries.length || hasInvalidEntry) {
     consola.error("  Lucide tag map is invalid; expected non-empty object of string arrays.");
+    return;
+  }
+
+  return repo;
+}
+
+/**
+ * Find icon names associated with a tag.
+ *
+ * @param term - Tag to match (case-insensitive)
+ * @param repo - Optional pre-parsed tag map; if omitted the function will attempt to load and parse the tag data
+ * @returns An array of icon names that include the tag, or `undefined` if tag data cannot be loaded
+ */
+export function findIconsByTag(term: string, repo?: IconsTagMap): Array<string> | undefined {
+  if (repo === undefined) {
+    repo = parseIconTagMap();
+  }
+
+  if (!repo) {
+    consola.error("  Unable to read Lucide tag data");
     return;
   }
 

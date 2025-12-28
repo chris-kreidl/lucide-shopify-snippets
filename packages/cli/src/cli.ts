@@ -3,6 +3,7 @@ import { program } from "commander";
 import { addIcons } from "./commands/add.ts";
 import { searchIcons } from "./commands/search.ts";
 import { version } from "../package.json";
+import { listTags } from "./commands/tags.ts";
 
 program
   .name("lucide-shopify-snippets")
@@ -24,5 +25,7 @@ program
   .argument("<term>", "Search term. Searches icon name if tag option not set")
   .option("-t, --tag", "Search tags")
   .action(searchIcons);
+
+program.command("tags").description("List available tags as provided by Lucide").action(listTags);
 
 program.parse();
