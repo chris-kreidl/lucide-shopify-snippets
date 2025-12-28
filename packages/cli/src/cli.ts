@@ -21,7 +21,8 @@ program
 program
   .command("search")
   .description("Search Lucide library for icons")
-  .argument("<icon>", "Icon name to search (e.g., menu)")
+  .argument("<term>", "Search term. Searches icon name if tag option not set")
+  .option("-t, --tag", "Search tags")
   .action(searchIcons);
 
 program.parse();

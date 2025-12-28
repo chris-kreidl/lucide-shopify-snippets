@@ -39,7 +39,7 @@ export function getAvailableIcons(): string[] {
  *
  * @returns The absolute path to the lucide-static icons directory, or `null` if not found
  */
-function getLucideIconsDir(): string | null {
+export function getLucideIconsDir(): string | null {
   try {
     const require = createRequire(import.meta.url);
     const lucidePackageJson = require.resolve("lucide-static/package.json");
