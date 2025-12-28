@@ -1,4 +1,5 @@
 import consola from "consola";
+import { safeDestr } from "destr";
 import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, join } from "path";
@@ -122,7 +123,7 @@ export function findIconsByTag(term: string): Array<string> | undefined {
   }
 
   try {
-    repo = JSON.parse(rawRepo) as IconsTagMap;
+    repo = safeDestr<IconsTagMap>(rawRepo);
   } catch (err) {
     const error = err as { message?: string; code?: string };
     const code = error.code ? ` (${error.code})` : "";
