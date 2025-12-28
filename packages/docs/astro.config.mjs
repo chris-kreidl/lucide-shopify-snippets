@@ -26,6 +26,7 @@ export default defineConfig({
           items: [
             { label: "add", slug: "commands/add" },
             { label: "search", slug: "commands/search" },
+            { label: "tags", slug: "commands/tags" },
           ],
         },
       ],

@@ -92,16 +92,11 @@ type IconsTagMap = {
 };
 
 /**
- * Find icons matching specified tag
+ * Resolve the path to Lucide's `tags.json`
  *
- * Returns array of string names that match the requested tag
- *
- * @param term - string to search tags against
- * @returns Array of strings or `undefined` if tags can't be loaded.
+ * @returns The absolute path to tags.json, or undefined if it can't find the directory
  */
-export function findIconsByTag(term: string): Array<string> | undefined {
-  let repo: IconsTagMap;
-
+function resolveTagsPath(): string | undefined {
   const iconsDir = getLucideIconsDir();
 
   if (!iconsDir) {
@@ -110,6 +105,25 @@ export function findIconsByTag(term: string): Array<string> | undefined {
   }
 
   const repoPath = join(iconsDir, "../tags.json");
+
+  return repoPath;
+}
+
+/**
+ * Parse Lucide's `tags.json` and return an object whose keys are icon names and values are
+ * the tags given by Lucide
+ *
+ * @returns {IconsTagMap | undefined} Parsed tag map
+ */
+export function parseIconTagMap(): IconsTagMap | undefined {
+  let repo: IconsTagMap;
+
+  const repoPath = resolveTagsPath();
+  if (!repoPath) {
+    consola.error("  Cannot resolve tags path");
+    return;
+  }
+
   let rawRepo: string;
 
   try {
@@ -149,6 +163,28 @@ export function findIconsByTag(term: string): Array<string> | undefined {
 
   if (!entries.length || hasInvalidEntry) {
     consola.error("  Lucide tag map is invalid; expected non-empty object of string arrays.");
+    return;
+  }
+
+  return repo;
+}
+
+/**
+ * Find icons matching specified tag
+ *
+ * Returns array of string names that match the requested tag
+ *
+ * @param term - string to search tags against
+ * @param repo - Preparsed tag map (optional, will parse if not provided)
+ * @returns Array of strings or `undefined` if tags can't be loaded.
+ */
+export function findIconsByTag(term: string, repo?: IconsTagMap): Array<string> | undefined {
+  if (repo === undefined) {
+    repo = parseIconTagMap();
+  }
+
+  if (!repo) {
+    consola.error("  Unable to read Lucide tag data");
     return;
   }
 
