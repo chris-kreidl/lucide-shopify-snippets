@@ -1,5 +1,11 @@
 import { describe, expect, test } from "bun:test";
-import { findExactMatch, findSimilar, getAvailableIcons, resolveIconPath } from "./utils.ts";
+import {
+  findExactMatch,
+  findIconsByTag,
+  findSimilar,
+  getAvailableIcons,
+  resolveIconPath,
+} from "./utils.ts";
 
 describe("findExactMatch", () => {
   const icons = ["menu", "chevron-down", "arrow-right", "ArrowLeft"];
@@ -132,5 +138,46 @@ describe("getAvailableIcons", () => {
     const icons = getAvailableIcons();
     const hasExtension = icons.some((icon) => icon.endsWith(".svg"));
     expect(hasExtension).toBe(false);
+  });
+});
+
+describe("findIconsByTag", () => {
+  test("returns array of icons for valid tag", () => {
+    const icons = findIconsByTag("arrow");
+    expect(icons).toBeDefined();
+    expect(Array.isArray(icons)).toBe(true);
+    expect(icons!.length).toBeGreaterThan(0);
+  });
+
+  test("finds icons case-insensitively", () => {
+    const lower = findIconsByTag("arrow");
+    const upper = findIconsByTag("ARROW");
+    const mixed = findIconsByTag("Arrow");
+
+    expect(lower).toEqual(upper);
+    expect(lower).toEqual(mixed);
+  });
+
+  test("returns empty array when no icons match tag", () => {
+    const icons = findIconsByTag("this-tag-definitely-does-not-exist-12345");
+    expect(icons).toBeDefined();
+    expect(icons).toEqual([]);
+  });
+
+  test("finds icons with common tags", () => {
+    // "menu" tag should match icons like menu, menu-square, etc.
+    const icons = findIconsByTag("menu");
+    expect(icons).toBeDefined();
+    expect(icons!.length).toBeGreaterThan(0);
+  });
+
+  test("returns icons that actually exist", () => {
+    const taggedIcons = findIconsByTag("arrow");
+    const availableIcons = getAvailableIcons();
+
+    expect(taggedIcons).toBeDefined();
+    for (const icon of taggedIcons!) {
+      expect(availableIcons).toContain(icon);
+    }
   });
 });

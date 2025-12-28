@@ -1,9 +1,4 @@
-import {
-  findExactMatch,
-  findIconsByTag,
-  findSimilar,
-  getAvailableIcons,
-} from "../lib/utils";
+import { findExactMatch, findIconsByTag, findSimilar, getAvailableIcons } from "../lib/utils";
 import consola from "consola";
 
 interface SearchOptions {
