@@ -11,7 +11,7 @@ const { IconSet } = await import("./IconSet");
 
 // Concrete test implementation of abstract IconSet
 class TestIconSet extends IconSet {
-  loadIcons() {
+  override loadIcons() {
     this.iconNames = ["menu", "menus", "chevron-down", "chevron-up", "arrow-right", "arrow-left"];
   }
 
@@ -23,7 +23,7 @@ class TestIconSet extends IconSet {
     this.tagNames = ["arrow", "direction", "hamburger", "navigation"];
   }
 
-  getIcon(icon: string) {
+  override getIcon(icon: string) {
     return `<path data-icon="${icon}" />`;
   }
 }
@@ -40,7 +40,7 @@ describe("IconSet", () => {
     let iconSet: InstanceType<typeof TestIconSet>;
 
     beforeEach(() => {
-      iconSet = new TestIconSet("fake-package");
+      iconSet = new TestIconSet("fake-package", { default: "icons" }, "default");
     });
 
     test("finds exact match", () => {
@@ -66,7 +66,7 @@ describe("IconSet", () => {
     let iconSet: InstanceType<typeof TestIconSet>;
 
     beforeEach(() => {
-      iconSet = new TestIconSet("fake-package");
+      iconSet = new TestIconSet("fake-package", { default: "icons" }, "default");
     });
 
     test("finds substring matches", () => {
@@ -111,7 +111,7 @@ describe("IconSet", () => {
     let iconSet: InstanceType<typeof TestIconSet>;
 
     beforeEach(() => {
-      iconSet = new TestIconSet("fake-package");
+      iconSet = new TestIconSet("fake-package", { default: "icons" }, "default");
     });
 
     test("extracts inner content from SVG", () => {
@@ -137,12 +137,12 @@ describe("IconSet", () => {
 
   describe("supportsTags", () => {
     test("returns false by default", () => {
-      const iconSet = new TestIconSet("fake-package");
+      const iconSet = new TestIconSet("fake-package", { default: "icons" }, "default");
       expect(iconSet.supportsTags()).toBe(false);
     });
 
     test("can be overridden to return true", () => {
-      const iconSet = new TaggableTestIconSet("fake-package");
+      const iconSet = new TaggableTestIconSet("fake-package", { default: "icons" }, "default");
       expect(iconSet.supportsTags()).toBe(true);
     });
   });
@@ -151,7 +151,7 @@ describe("IconSet", () => {
     let iconSet: InstanceType<typeof TestIconSet>;
 
     beforeEach(() => {
-      iconSet = new TestIconSet("fake-package");
+      iconSet = new TestIconSet("fake-package", { default: "icons" }, "default");
     });
 
     test("getTags returns empty array by default", () => {
@@ -165,18 +165,18 @@ describe("IconSet", () => {
 
   describe("constructor behavior", () => {
     test("calls loadIcons on construction", () => {
-      const iconSet = new TestIconSet("fake-package");
+      const iconSet = new TestIconSet("fake-package", { default: "icons" }, "default");
       expect(iconSet.iconNames.length).toBeGreaterThan(0);
     });
 
     test("does not call loadTags when supportsTags returns false", () => {
-      const iconSet = new TestIconSet("fake-package");
+      const iconSet = new TestIconSet("fake-package", { default: "icons" }, "default");
       expect(iconSet.tagNames).toEqual([]);
       expect(iconSet.tagMap).toEqual({});
     });
 
     test("calls loadTags when supportsTags returns true", () => {
-      const iconSet = new TaggableTestIconSet("fake-package");
+      const iconSet = new TaggableTestIconSet("fake-package", { default: "icons" }, "default");
       expect(iconSet.tagNames.length).toBeGreaterThan(0);
       expect(Object.keys(iconSet.tagMap).length).toBeGreaterThan(0);
     });
