@@ -81,31 +81,41 @@ describe("findIconsByTag error handling", () => {
       throw error;
     });
 
-    expect(() => { findIconsByTag("arrow") }).toThrow();
+    expect(() => {
+      findIconsByTag("arrow");
+    }).toThrow();
   });
 
   test("throws for invalid JSON", () => {
     mockReadFileSync.mockImplementation(() => "{ invalid json }");
 
-    expect(() => { findIconsByTag("arrow") }).toThrow();
+    expect(() => {
+      findIconsByTag("arrow");
+    }).toThrow();
   });
 
   test("throws for null JSON", () => {
     mockReadFileSync.mockImplementation(() => "null");
 
-    expect(() => { findIconsByTag("arrow") }).toThrow();
+    expect(() => {
+      findIconsByTag("arrow");
+    }).toThrow();
   });
 
   test("throws for array JSON", () => {
     mockReadFileSync.mockImplementation(() => "[]");
 
-    expect(() => { findIconsByTag("arrow") }).toThrow();
+    expect(() => {
+      findIconsByTag("arrow");
+    }).toThrow();
   });
 
   test("throws for empty object", () => {
     mockReadFileSync.mockImplementation(() => "{}");
 
-    expect(() => { findIconsByTag("arrow") }).toThrow();
+    expect(() => {
+      findIconsByTag("arrow");
+    }).toThrow();
   });
 
   test("throws when tag values are not arrays", () => {
@@ -115,7 +125,9 @@ describe("findIconsByTag error handling", () => {
       }),
     );
 
-    expect(() => { findIconsByTag("arrow") }).toThrow();
+    expect(() => {
+      findIconsByTag("arrow");
+    }).toThrow();
   });
 
   test("throws when tag array contains non-strings", () => {
@@ -125,6 +137,8 @@ describe("findIconsByTag error handling", () => {
       }),
     );
 
-    expect(() => { findIconsByTag("arrow") }).toThrow();
+    expect(() => {
+      findIconsByTag("arrow");
+    }).toThrow();
   });
 });

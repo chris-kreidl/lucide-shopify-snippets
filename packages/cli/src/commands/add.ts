@@ -3,6 +3,7 @@ import { join } from "path";
 import { generateSnippet } from "../generator";
 import { consola } from "consola";
 import { findSimilar, getAvailableIcons, resolveIconPath } from "../lib/utils";
+import { IconNotFoundError } from "../lib/errors";
 
 interface AddOptions {
   dir: string;
@@ -37,21 +38,25 @@ export async function addIcons(icons: string[], options: AddOptions): Promise<vo
     for (const iconName of icons) {
       const start = performance.now();
 
-      const iconPath = resolveIconPath(iconName);
+      let iconPath: string;
+      try {
+        iconPath = resolveIconPath(iconName);
+      } catch (err) {
+        if (err instanceof IconNotFoundError) {
+          consola.error(`  Icon "${err.icon}" not found`);
 
-      if (!iconPath) {
-        consola.error(`Error: Icon "${iconName}" not found.`);
+          const available = getAvailableIcons();
+          const similar = findSimilar(available, iconName);
 
-        // Suggest similar icons
-        const available = getAvailableIcons();
-        const similar = findSimilar(available, iconName);
+          if (similar.length > 0) {
+            consola.log(`  Did you mean: ${similar.join(", ")}?`);
+          }
 
-        if (similar.length > 0) {
-          consola.log(`  Did you mean: ${similar.join(", ")}?`);
+          errorCount++;
+          continue;
         }
 
-        errorCount++;
-        continue;
+        throw err;
       }
 
       try {

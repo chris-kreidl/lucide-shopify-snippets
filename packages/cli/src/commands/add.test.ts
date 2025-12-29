@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, mock, test } from "bun:test";
+import { IconNotFoundError } from "../lib/errors";
 
 // Mock fs module
 const mockExistsSync = mock((_path: string) => false);
@@ -112,9 +113,11 @@ describe("addIcons", () => {
   });
 
   test("logs error for nonexistent icon", async () => {
-    mockResolveIconPath.mockImplementation(() => null);
+    mockResolveIconPath.mockImplementation(() => {
+      throw new IconNotFoundError("this-icon-does-not-exist-12345");
+    });
 
-    await addIcons(["nonexistent"], { dir: "snippets", prefix: "icon-", force: false });
+    await addIcons(["this-icon-does-not-exist-12345"], { dir: "snippets", prefix: "icon-", force: false });
 
     expect(mockConsolaError).toHaveBeenCalled();
     expect(mockWriteFileSync).not.toHaveBeenCalled();

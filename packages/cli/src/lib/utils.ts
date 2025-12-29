@@ -4,6 +4,7 @@ import { createRequire } from "node:module";
 import { dirname, join } from "path";
 import { similarity } from "radashi";
 import type { IconsTagMap } from "./types";
+import { IconNotFoundError, InvalidTagMapStructureError } from "./errors";
 
 /**
  * Locate the filesystem path of an SVG for a given lucide icon name.
@@ -18,9 +19,9 @@ export function resolveIconPath(iconName: string): string {
   const iconPath = join(iconsDir, `${iconName}.svg`);
 
   if (!existsSync(iconPath)) {
-    throw new Error(`Icon ${iconName} path not found`);
+    throw new IconNotFoundError(iconName);
   }
-  
+
   return iconPath;
 }
 
@@ -107,7 +108,7 @@ function resolveTagsPath(): string {
  * Load and parse Lucide's tags.json into a map of icon names to their tag arrays.
  *
  * @returns An IconsTagMap mapping icon names to arrays of tag strings
- * @throws {Error} If tags.json cannot be read or parsed
+ * @throws {InvalidTagMapStructureError | NodeJS.ErrnoException} If tags.json cannot be read or parsed
  */
 export function parseIconTagMap(): IconsTagMap {
   const repoPath = resolveTagsPath();
@@ -123,7 +124,9 @@ export function parseIconTagMap(): IconsTagMap {
   const repo = safeDestr<IconsTagMap>(rawRepo);
 
   if (!repo || typeof repo !== "object" || Array.isArray(repo)) {
-    throw new Error("Lucide tag map is invalid; expected non-empty object of string arrays.");
+    throw new InvalidTagMapStructureError(
+      "Lucide tag map is invalid; expected non-empty object of string arrays.",
+    );
   }
 
   const entries = Object.entries(repo);
@@ -135,7 +138,9 @@ export function parseIconTagMap(): IconsTagMap {
   );
 
   if (!entries.length || hasInvalidEntry) {
-    throw new Error("Lucide tag map is invalid; expected non-empty object of string arrays.");
+    throw new InvalidTagMapStructureError(
+      "Lucide tag map is invalid; expected non-empty object of string arrays.",
+    );
   }
 
   return repo;
