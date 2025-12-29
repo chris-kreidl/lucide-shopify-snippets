@@ -106,16 +106,16 @@ describe("resolveIconPath", () => {
     expect(() => resolveIconPath("this-icon-does-not-exist-12345")).toThrow(IconNotFoundError);
   });
 
-  test("returns null for empty string", () => {
+  test("throws for empty string", () => {
     expect(() => resolveIconPath("")).toThrow(IconNotFoundError);
   });
 
-  test("returns null for path traversal attempts", () => {
+  test("throws for path traversal attempts", () => {
     expect(() => resolveIconPath("../package")).toThrow(IconNotFoundError);
     expect(() => resolveIconPath("../../etc/passwd")).toThrow(IconNotFoundError);
   });
 
-  test("returns null for names with special characters", () => {
+  test("throws for names with special characters", () => {
     expect(() => resolveIconPath("menu<script>")).toThrow(IconNotFoundError);
     expect(() => resolveIconPath("menu;rm -rf")).toThrow(IconNotFoundError);
   });

@@ -17,7 +17,7 @@ void mock.module("fs", () => ({
 }));
 
 // Mock utils
-const mockResolveIconPath = mock((_name: string): string | null => "/fake/path/menu.svg");
+const mockResolveIconPath = mock((_name: string): string => "/fake/path/menu.svg");
 const mockGetAvailableIcons = mock((): string[] => ["menu", "arrow-right", "chevron-down"]);
 const mockFindSimilar = mock((_haystack: string[], _needle: string): string[] => ["menu"]);
 

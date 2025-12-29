@@ -85,6 +85,6 @@ export async function addIcons(icons: string[], options: AddOptions): Promise<vo
       `\nDone! Added ${successCount} icon(s)${errorCount > 0 ? `, ${errorCount} failed` : ""}.`,
     );
   } catch (error) {
-    consola.error(`  ${(error as Error).message}`);
+    consola.error((error as Error).message);
   }
 }
