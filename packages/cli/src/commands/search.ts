@@ -18,7 +18,7 @@ interface SearchOptions {
  */
 export function searchIcons(term: string, options: SearchOptions): void {
   try {
-    const iconset = getIconSet('lucide');
+    const iconset = getIconSet("lucide");
 
     if (options.tag) {
       const filtered = iconset.findIconsByTag(term);

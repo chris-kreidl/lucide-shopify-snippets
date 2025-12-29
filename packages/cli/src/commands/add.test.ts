@@ -21,16 +21,16 @@ void mock.module("fs", () => ({
 
 const mockIconSet = {
   getIcon: mock(() => "<path />"),
-  findSimilar: mock(() => ['menu']),
-  iconNames: ['menu', 'arrow-right'],
-  findExactMatch: mock(() => 'menu'),
+  findSimilar: mock(() => ["menu"]),
+  iconNames: ["menu", "arrow-right"],
+  findExactMatch: mock(() => "menu"),
   findIconsByTag: mock(() => []),
   getTags: mock(() => []),
   tagNames: [],
   supportsTags: mock(() => false),
-}
+};
 
-void mock.module('../lib/iconsets', () => ({ getIconSet: mock(() => mockIconSet) }));
+void mock.module("../lib/iconsets", () => ({ getIconSet: mock(() => mockIconSet) }));
 
 // Mock consola
 const mockConsolaLog = mock((..._args: unknown[]) => {});

@@ -11,7 +11,7 @@ import { getIconSet } from "../lib/iconsets";
  */
 export function listTags() {
   try {
-    const iconset = getIconSet('lucide');
+    const iconset = getIconSet("lucide");
 
     if (iconset.tagNames.length) {
       consola.log(`  Found the following tags:`);

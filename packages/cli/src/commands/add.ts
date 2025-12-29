@@ -34,7 +34,7 @@ export async function addIcons(icons: string[], options: AddOptions): Promise<vo
 
     let successCount = 0;
     let errorCount = 0;
-    const iconset = getIconSet('lucide');
+    const iconset = getIconSet("lucide");
 
     for (const iconName of icons) {
       const start = performance.now();
