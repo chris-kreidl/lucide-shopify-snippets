@@ -1,4 +1,4 @@
-import { findExactMatch, findIconsByTag, findSimilar, getAvailableIcons } from "../lib/utils";
+import { Lucide } from "../lib/Lucide";
 import consola from "consola";
 
 interface SearchOptions {
@@ -18,8 +18,10 @@ interface SearchOptions {
  */
 export function searchIcons(term: string, options: SearchOptions): void {
   try {
+    const lucide = new Lucide();
+
     if (options.tag) {
-      const filtered = findIconsByTag(term);
+      const filtered = lucide.findIconsByTag(term);
 
       if (filtered.length) {
         consola.log(
@@ -29,11 +31,8 @@ export function searchIcons(term: string, options: SearchOptions): void {
         consola.log(`  Did not find any icons tagged "${term}"`);
       }
     } else {
-      const available = getAvailableIcons();
-
-      const exact = findExactMatch(available, term);
-
-      const similar = findSimilar(available, term);
+      const exact = lucide.findExactMatch(term);
+      const similar = lucide.findSimilar(term);
 
       if (exact) {
         consola.log(`  Found exact match: ${exact}`);

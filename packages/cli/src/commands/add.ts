@@ -1,9 +1,9 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
+import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { join } from "path";
 import { generateSnippet } from "../generator";
 import { consola } from "consola";
-import { findSimilar, getAvailableIcons, resolveIconPath } from "../lib/utils";
 import { IconNotFoundError } from "../lib/errors";
+import { Lucide } from "../lib/Lucide";
 
 interface AddOptions {
   dir: string;
@@ -34,19 +34,19 @@ export async function addIcons(icons: string[], options: AddOptions): Promise<vo
 
     let successCount = 0;
     let errorCount = 0;
+    const lucide = new Lucide();
 
     for (const iconName of icons) {
       const start = performance.now();
 
-      let iconPath: string;
+      let svgContent: string;
       try {
-        iconPath = resolveIconPath(iconName);
+        svgContent = lucide.getIcon(iconName);
       } catch (err) {
         if (err instanceof IconNotFoundError) {
-          consola.error(`  Icon "${err.icon}" not found`);
+          consola.error(`  Icon "${iconName}" not found`);
 
-          const available = getAvailableIcons();
-          const similar = findSimilar(available, iconName);
+          const similar = lucide.findSimilar(iconName);
 
           if (similar.length > 0) {
             consola.log(`  Did you mean: ${similar.join(", ")}?`);
@@ -60,7 +60,6 @@ export async function addIcons(icons: string[], options: AddOptions): Promise<vo
       }
 
       try {
-        const svgContent = readFileSync(iconPath, "utf-8");
         const snippet = generateSnippet(svgContent, iconName);
         const outputPath = join(snippetsDir, `${options.prefix}${iconName}.liquid`);
 

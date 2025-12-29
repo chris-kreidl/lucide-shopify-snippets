@@ -1,6 +1,5 @@
 import consola from "consola";
-import { findIconsByTag, parseIconTagMap } from "../lib/utils";
-import { alphabetical, flat, unique } from "radashi";
+import { Lucide } from "../lib/Lucide";
 
 /**
  * Print available icon tags and the number of icons for each tag.
@@ -12,15 +11,13 @@ import { alphabetical, flat, unique } from "radashi";
  */
 export function listTags() {
   try {
-    const repo = parseIconTagMap();
+    const lucide = new Lucide();
 
-    const tags = alphabetical(unique(flat(Object.values(repo))), (k) => k);
-
-    if (tags.length) {
+    if (lucide.tagNames.length) {
       consola.log(`  Found the following tags:`);
 
-      tags.forEach((tag) => {
-        const icons = findIconsByTag(tag, repo);
+      lucide.tagNames.forEach((tag) => {
+        const icons = lucide.findIconsByTag(tag);
         consola.log(`    * ${tag} [${icons.length} icon${icons.length === 1 ? "" : "s"}]`);
       });
     } else {

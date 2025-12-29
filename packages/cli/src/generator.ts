@@ -14,9 +14,9 @@
  */
 export function generateSnippet(svgContent: string, iconName: string): string {
   // Extract the inner content of the SVG (paths, circles, etc.)
-  const innerMatch = svgContent.match(/<svg[^>]*>([\s\S]*)<\/svg>/);
-  if (!innerMatch || !innerMatch[1]) throw new Error(`Error parsing Lucide SVG`);
-  const innerContent = innerMatch[1].trim();
+  // const innerMatch = svgContent.match(/<svg[^>]*>([\s\S]*)<\/svg>/);
+  // if (!innerMatch || !innerMatch[1]) throw new Error(`Error parsing Lucide SVG`);
+  // const innerContent = innerMatch[1].trim();
 
   // Build the Liquid snippet
   const snippet = `{%- comment -%}
@@ -44,7 +44,7 @@ export function generateSnippet(svgContent: string, iconName: string): string {
   class="lucide lucide-${iconName}{% if class %} {{ class }}{% endif %}"
   aria-hidden="true"
 >
-${innerContent}
+${svgContent}
 </svg>
 `;
 
