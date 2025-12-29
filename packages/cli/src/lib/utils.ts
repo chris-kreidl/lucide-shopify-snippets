@@ -9,24 +9,30 @@ import type { IconsTagMap } from "./types";
  * Locate the filesystem path of an SVG for a given lucide icon name.
  *
  * @param iconName - Icon name without the `.svg` extension
- * @returns The filesystem path to the first matching SVG file, or `null` if none is found
+ * @returns The filesystem path to the first matching SVG file
+ * @throws {Error} If icon directory or path not found
  */
-export function resolveIconPath(iconName: string): string | null {
+export function resolveIconPath(iconName: string): string {
   const iconsDir = getLucideIconsDir();
-  if (!iconsDir) return null;
 
   const iconPath = join(iconsDir, `${iconName}.svg`);
-  return existsSync(iconPath) ? iconPath : null;
+
+  if (!existsSync(iconPath)) {
+    throw new Error(`Icon ${iconName} path not found`);
+  }
+  
+  return iconPath;
 }
 
 /**
  * List available lucide-static icon names.
  *
  * @returns An array of icon names (without `.svg` extension), or empty array if not found
+ * @throws {Error} Bubbles error from `getLucideIconsDir`
  */
 export function getAvailableIcons(): string[] {
   const iconsDir = getLucideIconsDir();
-  if (!iconsDir || !existsSync(iconsDir)) return [];
+  if (!existsSync(iconsDir)) return [];
 
   return readdirSync(iconsDir)
     .filter((f) => f.endsWith(".svg"))
@@ -88,6 +94,7 @@ export function findSimilar(haystack: Array<string>, needle: string, count = 5):
  * Resolve the path to Lucide's `tags.json`
  *
  * @returns The absolute path to tags.json
+ * @throws {Error} If lucide-static package cannot be resolved
  */
 function resolveTagsPath(): string {
   const iconsDir = getLucideIconsDir();
@@ -100,6 +107,7 @@ function resolveTagsPath(): string {
  * Load and parse Lucide's tags.json into a map of icon names to their tag arrays.
  *
  * @returns An IconsTagMap mapping icon names to arrays of tag strings
+ * @throws {Error} If tags.json cannot be read or parsed
  */
 export function parseIconTagMap(): IconsTagMap {
   const repoPath = resolveTagsPath();
@@ -139,6 +147,7 @@ export function parseIconTagMap(): IconsTagMap {
  * @param term - Tag to match (case-insensitive)
  * @param repo - Optional pre-parsed tag map; if omitted the function will attempt to load and parse the tag data
  * @returns An array of icon names that include the tag
+ * @throws {Error} If tag data cannot be loaded (when repo not provided)
  */
 export function findIconsByTag(term: string, repo?: IconsTagMap): Array<string> {
   if (repo === undefined) {
