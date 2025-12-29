@@ -117,7 +117,11 @@ describe("addIcons", () => {
       throw new IconNotFoundError("this-icon-does-not-exist-12345");
     });
 
-    await addIcons(["this-icon-does-not-exist-12345"], { dir: "snippets", prefix: "icon-", force: false });
+    await addIcons(["this-icon-does-not-exist-12345"], {
+      dir: "snippets",
+      prefix: "icon-",
+      force: false,
+    });
 
     expect(mockConsolaError).toHaveBeenCalled();
     expect(mockWriteFileSync).not.toHaveBeenCalled();
