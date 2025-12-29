@@ -1,5 +1,4 @@
 import { getIconSet } from "../lib/iconsets";
-import { Lucide } from "../lib/Lucide";
 import consola from "consola";
 
 interface SearchOptions {

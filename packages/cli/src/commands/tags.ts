@@ -1,5 +1,4 @@
 import consola from "consola";
-import { Lucide } from "../lib/Lucide";
 import { getIconSet } from "../lib/iconsets";
 
 /**

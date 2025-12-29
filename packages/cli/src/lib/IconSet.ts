@@ -79,7 +79,7 @@ export abstract class IconSet {
   }
 
   getTags(): Array<string> {
-    return [];
+    return this.tagNames;
   }
 
   /* oxlint-disable-next-line no-unused-vars */
