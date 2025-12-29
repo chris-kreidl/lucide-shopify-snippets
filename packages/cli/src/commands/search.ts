@@ -1,3 +1,4 @@
+import { getIconSet } from "../lib/iconsets";
 import { Lucide } from "../lib/Lucide";
 import consola from "consola";
 
@@ -18,10 +19,10 @@ interface SearchOptions {
  */
 export function searchIcons(term: string, options: SearchOptions): void {
   try {
-    const lucide = new Lucide();
+    const iconset = getIconSet('lucide');
 
     if (options.tag) {
-      const filtered = lucide.findIconsByTag(term);
+      const filtered = iconset.findIconsByTag(term);
 
       if (filtered.length) {
         consola.log(
@@ -31,8 +32,8 @@ export function searchIcons(term: string, options: SearchOptions): void {
         consola.log(`  Did not find any icons tagged "${term}"`);
       }
     } else {
-      const exact = lucide.findExactMatch(term);
-      const similar = lucide.findSimilar(term);
+      const exact = iconset.findExactMatch(term);
+      const similar = iconset.findSimilar(term);
 
       if (exact) {
         consola.log(`  Found exact match: ${exact}`);

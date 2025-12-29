@@ -1,5 +1,6 @@
 import consola from "consola";
 import { Lucide } from "../lib/Lucide";
+import { getIconSet } from "../lib/iconsets";
 
 /**
  * Print available icon tags and the number of icons for each tag.
@@ -11,13 +12,13 @@ import { Lucide } from "../lib/Lucide";
  */
 export function listTags() {
   try {
-    const lucide = new Lucide();
+    const iconset = getIconSet('lucide');
 
-    if (lucide.tagNames.length) {
+    if (iconset.tagNames.length) {
       consola.log(`  Found the following tags:`);
 
-      lucide.tagNames.forEach((tag) => {
-        const icons = lucide.findIconsByTag(tag);
+      iconset.tagNames.forEach((tag) => {
+        const icons = iconset.findIconsByTag(tag);
         consola.log(`    * ${tag} [${icons.length} icon${icons.length === 1 ? "" : "s"}]`);
       });
     } else {

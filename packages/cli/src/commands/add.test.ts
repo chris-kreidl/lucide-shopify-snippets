@@ -1,4 +1,6 @@
 import { beforeEach, describe, expect, mock, test } from "bun:test";
+import { getIconSet } from "../lib/iconsets";
+import { IconNotFoundError } from "../lib/errors";
 
 // Mock fs module
 const mockExistsSync = mock((_path: string) => false);
@@ -17,8 +19,13 @@ void mock.module("fs", () => ({
   readdirSync: mockReaddirSync,
 }));
 
-// Mock utils
-const mockResolveIconPath = mock((_name: string): string => "/fake/path/menu.svg");
+const mockIconSet = {
+  getIcon: mock(() => "<path />"),
+  findSimilar: mock(() => ['menu']),
+  iconNames: ['menu', 'arrow-right'],
+}
+
+void mock.module('../lib/iconsets', () => ({ getIconSet: mock(() => mockIconSet) }));
 
 // Mock consola
 const mockConsolaLog = mock((..._args: unknown[]) => {});
@@ -40,14 +47,13 @@ describe("addIcons", () => {
     mockMkdirSync.mockReset();
     mockReadFileSync.mockReset();
     mockWriteFileSync.mockReset();
-    mockResolveIconPath.mockReset();
     mockConsolaLog.mockReset();
     mockConsolaError.mockReset();
+    mockIconSet.getIcon.mockReset();
 
     // Default implementations
     mockExistsSync.mockImplementation(() => false);
     mockReadFileSync.mockImplementation(() => '<svg><path d="M4 5h16" /></svg>');
-    mockResolveIconPath.mockImplementation(() => "/fake/path/icon.svg");
   });
 
   test("creates snippets directory if it doesn't exist", async () => {
@@ -72,74 +78,74 @@ describe("addIcons", () => {
   // at the moment they're somewhat specific to our old Lucide-only implementation, and
   // we'll want the tests to be a bit more abstract once other icon libraries are added.
 
-  // test("writes snippet file for valid icon", async () => {
-  //   mockExistsSync.mockImplementation(() => false);
+  test("writes snippet file for valid icon", async () => {
+    mockExistsSync.mockImplementation(() => false);
 
-  //   await addIcons(["menu"], { dir: "snippets", prefix: "icon-", force: false });
+    await addIcons(["menu"], { dir: "snippets", prefix: "icon-", force: false });
 
-  //   expect(mockWriteFileSync).toHaveBeenCalled();
-  //   const call = mockWriteFileSync.mock.calls[0];
-  //   expect(call?.[0]).toContain("icon-menu.liquid");
-  //   expect(call?.[1]).toContain("<svg");
-  // });
+    expect(mockWriteFileSync).toHaveBeenCalled();
+    const call = mockWriteFileSync.mock.calls[0];
+    expect(call?.[0]).toContain("icon-menu.liquid");
+    expect(call?.[1]).toContain("<svg");
+  });
 
-  // test("uses custom prefix", async () => {
-  //   mockExistsSync.mockImplementation(() => false);
+  test("uses custom prefix", async () => {
+    mockExistsSync.mockImplementation(() => false);
 
-  //   await addIcons(["menu"], { dir: "snippets", prefix: "lucide-", force: false });
+    await addIcons(["menu"], { dir: "snippets", prefix: "lucide-", force: false });
 
-  //   const call = mockWriteFileSync.mock.calls[0];
-  //   expect(call?.[0]).toContain("lucide-menu.liquid");
-  // });
+    const call = mockWriteFileSync.mock.calls[0];
+    expect(call?.[0]).toContain("lucide-menu.liquid");
+  });
 
-  // test("skips existing files without force flag", async () => {
-  //   mockExistsSync.mockImplementation(() => true);
+  test("skips existing files without force flag", async () => {
+    mockExistsSync.mockImplementation(() => true);
 
-  //   await addIcons(["menu"], { dir: "snippets", prefix: "icon-", force: false });
+    await addIcons(["menu"], { dir: "snippets", prefix: "icon-", force: false });
 
-  //   expect(mockWriteFileSync).not.toHaveBeenCalled();
-  //   expect(mockConsolaError).toHaveBeenCalled();
-  // });
+    expect(mockWriteFileSync).not.toHaveBeenCalled();
+    expect(mockConsolaError).toHaveBeenCalled();
+  });
 
-  // test("overwrites existing files with force flag", async () => {
-  //   mockExistsSync.mockImplementation(() => true);
+  test("overwrites existing files with force flag", async () => {
+    mockExistsSync.mockImplementation(() => true);
 
-  //   await addIcons(["menu"], { dir: "snippets", prefix: "icon-", force: true });
+    await addIcons(["menu"], { dir: "snippets", prefix: "icon-", force: true });
 
-  //   expect(mockWriteFileSync).toHaveBeenCalled();
-  // });
+    expect(mockWriteFileSync).toHaveBeenCalled();
+  });
 
-  // test("logs error for nonexistent icon", async () => {
-  //   mockResolveIconPath.mockImplementation(() => {
-  //     throw new IconNotFoundError("this-icon-does-not-exist-12345");
-  //   });
+  test("logs error for nonexistent icon", async () => {
+    mockIconSet.getIcon.mockImplementation(() => {
+      throw new IconNotFoundError("this-icon-does-not-exist-12345");
+    });
 
-  //   await addIcons(["this-icon-does-not-exist-12345"], {
-  //     dir: "snippets",
-  //     prefix: "icon-",
-  //     force: false,
-  //   });
+    await addIcons(["this-icon-does-not-exist-12345"], {
+      dir: "snippets",
+      prefix: "icon-",
+      force: false,
+    });
 
-  //   expect(mockConsolaError).toHaveBeenCalled();
-  //   expect(mockWriteFileSync).not.toHaveBeenCalled();
-  // });
+    expect(mockConsolaError).toHaveBeenCalled();
+    expect(mockWriteFileSync).not.toHaveBeenCalled();
+  });
 
-  // test("processes multiple icons", async () => {
-  //   mockExistsSync.mockImplementation(() => false);
+  test("processes multiple icons", async () => {
+    mockExistsSync.mockImplementation(() => false);
 
-  //   await addIcons(["menu", "arrow"], { dir: "snippets", prefix: "icon-", force: false });
+    await addIcons(["menu", "arrow"], { dir: "snippets", prefix: "icon-", force: false });
 
-  //   expect(mockWriteFileSync).toHaveBeenCalledTimes(2);
-  // });
+    expect(mockWriteFileSync).toHaveBeenCalledTimes(2);
+  });
 
-  // test("logs summary with success count", async () => {
-  //   mockExistsSync.mockImplementation(() => false);
+  test("logs summary with success count", async () => {
+    mockExistsSync.mockImplementation(() => false);
 
-  //   await addIcons(["menu"], { dir: "snippets", prefix: "icon-", force: false });
+    await addIcons(["menu"], { dir: "snippets", prefix: "icon-", force: false });
 
-  //   const calls = mockConsolaLog.mock.calls;
-  //   const summaryCall = calls.find((call) => String(call?.[0]).includes("Done!"));
-  //   expect(summaryCall).toBeDefined();
-  //   expect(String(summaryCall?.[0])).toContain("1 icon(s)");
-  // });
+    const calls = mockConsolaLog.mock.calls;
+    const summaryCall = calls.find((call) => String(call?.[0]).includes("Done!"));
+    expect(summaryCall).toBeDefined();
+    expect(String(summaryCall?.[0])).toContain("1 icon(s)");
+  });
 });

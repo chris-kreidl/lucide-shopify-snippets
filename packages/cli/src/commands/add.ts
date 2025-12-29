@@ -3,7 +3,7 @@ import { join } from "path";
 import { generateSnippet } from "../generator";
 import { consola } from "consola";
 import { IconNotFoundError } from "../lib/errors";
-import { Lucide } from "../lib/Lucide";
+import { getIconSet } from "../lib/iconsets";
 
 interface AddOptions {
   dir: string;
@@ -34,19 +34,19 @@ export async function addIcons(icons: string[], options: AddOptions): Promise<vo
 
     let successCount = 0;
     let errorCount = 0;
-    const lucide = new Lucide();
+    const iconset = getIconSet('lucide');
 
     for (const iconName of icons) {
       const start = performance.now();
 
       let svgContent: string;
       try {
-        svgContent = lucide.getIcon(iconName);
+        svgContent = iconset.getIcon(iconName);
       } catch (err) {
         if (err instanceof IconNotFoundError) {
           consola.error(`  Icon "${iconName}" not found`);
 
-          const similar = lucide.findSimilar(iconName);
+          const similar = iconset.findSimilar(iconName);
 
           if (similar.length > 0) {
             consola.log(`  Did you mean: ${similar.join(", ")}?`);
