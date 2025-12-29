@@ -16,6 +16,7 @@ interface AddOptions {
  *
  * Creates the target directory if missing, resolves each icon to its SVG source, generates a snippet file named with the provided prefix, skips unresolved icons (and logs up to five similar suggestions), and respects the `force` option when deciding whether to overwrite existing files. Logs progress and a summary of successes and failures.
  *
+ * @param library - Icon library to search (e.g., "lucide", "heroicons")
  * @param icons - Array of icon names to convert into snippet files
  * @param options - Configuration for output:
  *   - `dir`: target directory for generated snippets
