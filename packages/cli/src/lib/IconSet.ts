@@ -27,9 +27,9 @@ export abstract class IconSet {
    */
   resolvePackageDirectory(packageName: string): string {
     const require = createRequire(import.meta.url);
-    const lucideDirectory = dirname(require.resolve(`${packageName}/package.json`));
+    const packageDirectory = dirname(require.resolve(`${packageName}/package.json`));
 
-    return lucideDirectory;
+    return packageDirectory;
   }
 
   /**
@@ -66,7 +66,7 @@ export abstract class IconSet {
     return [...substringMatches, ...fuzzyMatches].slice(0, count);
   }
 
-  extractPaths(svg: string) {
+  extractPaths(svg: string): string {
     const innerMatch = svg.match(/<svg[^>]*>([\s\S]*)<\/svg>/);
     if (!innerMatch || !innerMatch[1]) throw new Error(`Error parsing SVG`);
     const innerContent = innerMatch[1].trim();

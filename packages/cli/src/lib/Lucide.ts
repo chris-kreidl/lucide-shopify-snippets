@@ -26,10 +26,6 @@ export class Lucide extends IconSet {
     }
 
     const iconPath = join(this.packageDirectory, `icons/${icon}.svg`);
-    if (!existsSync(iconPath)) {
-      throw new IconNotFoundError(icon);
-    }
-
     const svgContent = readFileSync(iconPath, "utf-8");
 
     return this.extractPaths(svgContent);

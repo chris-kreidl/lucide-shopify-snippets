@@ -13,12 +13,6 @@
  *   {% render 'icon-menu', stroke_width: 1.5 %}
  */
 export function generateSnippet(svgContent: string, iconName: string): string {
-  // Extract the inner content of the SVG (paths, circles, etc.)
-  // const innerMatch = svgContent.match(/<svg[^>]*>([\s\S]*)<\/svg>/);
-  // if (!innerMatch || !innerMatch[1]) throw new Error(`Error parsing Lucide SVG`);
-  // const innerContent = innerMatch[1].trim();
-
-  // Build the Liquid snippet
   const snippet = `{%- comment -%}
   Lucide icon: ${iconName}
   Usage:
