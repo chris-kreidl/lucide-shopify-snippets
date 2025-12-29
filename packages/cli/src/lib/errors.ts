@@ -16,3 +16,11 @@ export class InvalidTagMapStructureError extends Error {
     this.name = "InvalidTagMapStructureError";
   }
 }
+
+export class UnknownIconSetError extends Error {
+  constructor(set: string) {
+    super(`Unknown icon set: ${set}`);
+
+    this.name = "UnknownIconSetError";
+  }
+}

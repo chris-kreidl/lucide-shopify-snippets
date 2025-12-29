@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, mock, test } from "bun:test";
+import { getIconSet } from "../lib/iconsets";
 import { IconNotFoundError } from "../lib/errors";
 
 // Mock fs module
@@ -8,24 +9,28 @@ const mockReadFileSync = mock(
   (_path: string, _encoding?: string) => '<svg><path d="M4 5h16" /></svg>',
 );
 const mockWriteFileSync = mock((_path: string, _content: string) => undefined);
+const mockReaddirSync = mock((_path: string) => ["menu.svg", "arrow-right.svg"]);
 
 void mock.module("fs", () => ({
   existsSync: mockExistsSync,
   mkdirSync: mockMkdirSync,
   readFileSync: mockReadFileSync,
   writeFileSync: mockWriteFileSync,
+  readdirSync: mockReaddirSync,
 }));
 
-// Mock utils
-const mockResolveIconPath = mock((_name: string): string => "/fake/path/menu.svg");
-const mockGetAvailableIcons = mock((): string[] => ["menu", "arrow-right", "chevron-down"]);
-const mockFindSimilar = mock((_haystack: string[], _needle: string): string[] => ["menu"]);
+const mockIconSet = {
+  getIcon: mock(() => "<path />"),
+  findSimilar: mock(() => ['menu']),
+  iconNames: ['menu', 'arrow-right'],
+  findExactMatch: mock(() => 'menu'),
+  findIconsByTag: mock(() => []),
+  getTags: mock(() => []),
+  tagNames: [],
+  supportsTags: mock(() => false),
+}
 
-void mock.module("../lib/utils", () => ({
-  resolveIconPath: mockResolveIconPath,
-  getAvailableIcons: mockGetAvailableIcons,
-  findSimilar: mockFindSimilar,
-}));
+void mock.module('../lib/iconsets', () => ({ getIconSet: mock(() => mockIconSet) }));
 
 // Mock consola
 const mockConsolaLog = mock((..._args: unknown[]) => {});
@@ -47,14 +52,13 @@ describe("addIcons", () => {
     mockMkdirSync.mockReset();
     mockReadFileSync.mockReset();
     mockWriteFileSync.mockReset();
-    mockResolveIconPath.mockReset();
     mockConsolaLog.mockReset();
     mockConsolaError.mockReset();
+    mockIconSet.getIcon.mockReset();
 
     // Default implementations
     mockExistsSync.mockImplementation(() => false);
     mockReadFileSync.mockImplementation(() => '<svg><path d="M4 5h16" /></svg>');
-    mockResolveIconPath.mockImplementation(() => "/fake/path/icon.svg");
   });
 
   test("creates snippets directory if it doesn't exist", async () => {
@@ -74,6 +78,10 @@ describe("addIcons", () => {
 
     expect(mockMkdirSync).not.toHaveBeenCalled();
   });
+
+  // TODO: these tests will need to get rewritten once our factory methods are in place.
+  // at the moment they're somewhat specific to our old Lucide-only implementation, and
+  // we'll want the tests to be a bit more abstract once other icon libraries are added.
 
   test("writes snippet file for valid icon", async () => {
     mockExistsSync.mockImplementation(() => false);
@@ -113,7 +121,7 @@ describe("addIcons", () => {
   });
 
   test("logs error for nonexistent icon", async () => {
-    mockResolveIconPath.mockImplementation(() => {
+    mockIconSet.getIcon.mockImplementation(() => {
       throw new IconNotFoundError("this-icon-does-not-exist-12345");
     });
 

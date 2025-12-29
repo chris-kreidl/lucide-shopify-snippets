@@ -1,4 +1,4 @@
-import { findExactMatch, findIconsByTag, findSimilar, getAvailableIcons } from "../lib/utils";
+import { getIconSet } from "../lib/iconsets";
 import consola from "consola";
 
 interface SearchOptions {
@@ -18,8 +18,10 @@ interface SearchOptions {
  */
 export function searchIcons(term: string, options: SearchOptions): void {
   try {
+    const iconset = getIconSet('lucide');
+
     if (options.tag) {
-      const filtered = findIconsByTag(term);
+      const filtered = iconset.findIconsByTag(term);
 
       if (filtered.length) {
         consola.log(
@@ -29,11 +31,8 @@ export function searchIcons(term: string, options: SearchOptions): void {
         consola.log(`  Did not find any icons tagged "${term}"`);
       }
     } else {
-      const available = getAvailableIcons();
-
-      const exact = findExactMatch(available, term);
-
-      const similar = findSimilar(available, term);
+      const exact = iconset.findExactMatch(term);
+      const similar = iconset.findSimilar(term);
 
       if (exact) {
         consola.log(`  Found exact match: ${exact}`);
