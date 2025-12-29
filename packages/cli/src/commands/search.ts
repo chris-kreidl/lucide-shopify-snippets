@@ -17,31 +17,35 @@ interface SearchOptions {
  * - `tag`: when `true`, searches for icons tagged as specified term
  */
 export function searchIcons(term: string, options: SearchOptions): void {
-  if (options.tag) {
-    const filtered = findIconsByTag(term);
+  try {
+    if (options.tag) {
+      const filtered = findIconsByTag(term);
 
-    if (filtered && filtered.length) {
-      consola.log(
-        `  Found the following icons that are tagged "${term}":\n  ${filtered.join(", ")}`,
-      );
+      if (filtered.length) {
+        consola.log(
+          `  Found the following icons that are tagged "${term}":\n  ${filtered.join(", ")}`,
+        );
+      } else {
+        consola.log(`  Did not find any icons tagged "${term}"`);
+      }
     } else {
-      consola.log(`  Did not find any icons tagged "${term}"`);
+      const available = getAvailableIcons();
+
+      const exact = findExactMatch(available, term);
+
+      const similar = findSimilar(available, term);
+
+      if (exact) {
+        consola.log(`  Found exact match: ${exact}`);
+      }
+
+      if (similar.length) {
+        consola.log(`  Found similar: ${similar.join(", ")}`);
+      } else {
+        consola.log(`  Nothing found approximating ${term}`);
+      }
     }
-  } else {
-    const available = getAvailableIcons();
-
-    const exact = findExactMatch(available, term);
-
-    const similar = findSimilar(available, term);
-
-    if (exact) {
-      consola.log(`  Found exact match: ${exact}`);
-    }
-
-    if (similar.length) {
-      consola.log(`  Found similar: ${similar.join(", ")}`);
-    } else {
-      consola.log(`  Nothing found approximating ${term}`);
-    }
+  } catch (error) {
+    consola.error(`  ${(error as Error).message}`);
   }
 }

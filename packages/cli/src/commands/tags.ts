@@ -11,18 +11,22 @@ import { alphabetical, flat, unique } from "radashi";
  * "    * <tag> [<n> icon(s)]".
  */
 export function listTags() {
-  const repo = parseIconTagMap();
+  try {
+    const repo = parseIconTagMap();
 
-  if (!repo) {
-    consola.error("  Cannot parse Lucide tag data");
-    return;
+    const tags = alphabetical(unique(flat(Object.values(repo))), (k) => k);
+
+    if (tags.length) {
+      consola.log(`  Found the following tags:`);
+
+      tags.forEach((tag) => {
+        const icons = findIconsByTag(tag, repo);
+        consola.log(`    * ${tag} [${icons.length} icon${icons.length === 1 ? "" : "s"}]`);
+      });
+    } else {
+      consola.warn(`  Couldn't find any tags?`);
+    }
+  } catch (err) {
+    consola.error(`  ${(err as Error).message}`);
   }
-
-  const tags = alphabetical(unique(flat(Object.values(repo))), (k) => k);
-
-  consola.log(`  Found the following tags:`);
-  tags.forEach((tag) => {
-    const icons = findIconsByTag(tag, repo);
-    consola.log(`    * ${tag} [${icons?.length || 0} icon${icons?.length === 1 ? '' : 's'}]`);
-  });
 }

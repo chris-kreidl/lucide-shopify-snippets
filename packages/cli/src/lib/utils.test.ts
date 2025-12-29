@@ -6,6 +6,7 @@ import {
   getAvailableIcons,
   resolveIconPath,
 } from "./utils.ts";
+import { IconNotFoundError } from "./errors.ts";
 
 describe("findExactMatch", () => {
   const icons = ["menu", "chevron-down", "arrow-right", "ArrowLeft"];
@@ -101,22 +102,22 @@ describe("resolveIconPath", () => {
     expect(path).toContain("menu.svg");
   });
 
-  test("returns null for nonexistent icon", () => {
-    expect(resolveIconPath("this-icon-does-not-exist-12345")).toBeNull();
+  test("throws for nonexistent icon", () => {
+    expect(() => resolveIconPath("this-icon-does-not-exist-12345")).toThrow(IconNotFoundError);
   });
 
-  test("returns null for empty string", () => {
-    expect(resolveIconPath("")).toBeNull();
+  test("throws for empty string", () => {
+    expect(() => resolveIconPath("")).toThrow(IconNotFoundError);
   });
 
-  test("returns null for path traversal attempts", () => {
-    expect(resolveIconPath("../package")).toBeNull();
-    expect(resolveIconPath("../../etc/passwd")).toBeNull();
+  test("throws for path traversal attempts", () => {
+    expect(() => resolveIconPath("../package")).toThrow(IconNotFoundError);
+    expect(() => resolveIconPath("../../etc/passwd")).toThrow(IconNotFoundError);
   });
 
-  test("returns null for names with special characters", () => {
-    expect(resolveIconPath("menu<script>")).toBeNull();
-    expect(resolveIconPath("menu;rm -rf")).toBeNull();
+  test("throws for names with special characters", () => {
+    expect(() => resolveIconPath("menu<script>")).toThrow(IconNotFoundError);
+    expect(() => resolveIconPath("menu;rm -rf")).toThrow(IconNotFoundError);
   });
 });
 

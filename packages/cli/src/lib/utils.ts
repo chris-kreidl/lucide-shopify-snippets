@@ -1,32 +1,39 @@
-import consola from "consola";
 import { safeDestr } from "destr";
 import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, join } from "path";
 import { similarity } from "radashi";
+import type { IconsTagMap } from "./types";
+import { IconNotFoundError, InvalidTagMapStructureError } from "./errors";
 
 /**
  * Locate the filesystem path of an SVG for a given lucide icon name.
  *
  * @param iconName - Icon name without the `.svg` extension
- * @returns The filesystem path to the first matching SVG file, or `null` if none is found
+ * @returns The filesystem path to the first matching SVG file
+ * @throws {Error} If icon directory or path not found
  */
-export function resolveIconPath(iconName: string): string | null {
+export function resolveIconPath(iconName: string): string {
   const iconsDir = getLucideIconsDir();
-  if (!iconsDir) return null;
 
   const iconPath = join(iconsDir, `${iconName}.svg`);
-  return existsSync(iconPath) ? iconPath : null;
+
+  if (!existsSync(iconPath)) {
+    throw new IconNotFoundError(iconName);
+  }
+
+  return iconPath;
 }
 
 /**
  * List available lucide-static icon names.
  *
  * @returns An array of icon names (without `.svg` extension), or empty array if not found
+ * @throws {Error} Bubbles error from `getLucideIconsDir`
  */
 export function getAvailableIcons(): string[] {
   const iconsDir = getLucideIconsDir();
-  if (!iconsDir || !existsSync(iconsDir)) return [];
+  if (!existsSync(iconsDir)) return [];
 
   return readdirSync(iconsDir)
     .filter((f) => f.endsWith(".svg"))
@@ -39,16 +46,13 @@ export function getAvailableIcons(): string[] {
  * Uses require.resolve to find the package location, which works correctly
  * when the CLI is installed via npx or as a dependency.
  *
- * @returns The absolute path to the lucide-static icons directory, or `null` if not found
+ * @returns The absolute path to the lucide-static icons directory
+ * @throws {Error} If lucide-static package cannot be resolved
  */
-export function getLucideIconsDir(): string | null {
-  try {
-    const require = createRequire(import.meta.url);
-    const lucidePackageJson = require.resolve("lucide-static/package.json");
-    return join(dirname(lucidePackageJson), "icons");
-  } catch {
-    return null;
-  }
+export function getLucideIconsDir(): string {
+  const require = createRequire(import.meta.url);
+  const lucidePackageJson = require.resolve("lucide-static/package.json");
+  return join(dirname(lucidePackageJson), "icons");
 }
 
 /**
@@ -87,23 +91,14 @@ export function findSimilar(haystack: Array<string>, needle: string, count = 5):
   return [...substringMatches, ...fuzzyMatches].slice(0, count);
 }
 
-type IconsTagMap = {
-  [icon: string]: Array<string>;
-};
-
 /**
  * Resolve the path to Lucide's `tags.json`
  *
- * @returns The absolute path to tags.json, or undefined if it can't find the directory
+ * @returns The absolute path to tags.json
+ * @throws {Error} If lucide-static package cannot be resolved
  */
-function resolveTagsPath(): string | undefined {
+function resolveTagsPath(): string {
   const iconsDir = getLucideIconsDir();
-
-  if (!iconsDir) {
-    consola.error("Cannot find Lucide icons directory");
-    return;
-  }
-
   const repoPath = join(iconsDir, "../tags.json");
 
   return repoPath;
@@ -112,44 +107,26 @@ function resolveTagsPath(): string | undefined {
 /**
  * Load and parse Lucide's tags.json into a map of icon names to their tag arrays.
  *
- * @returns An IconsTagMap mapping icon names to arrays of tag strings, or `undefined` if the tags file cannot be resolved, read, or parsed
+ * @returns An IconsTagMap mapping icon names to arrays of tag strings
+ * @throws {InvalidTagMapStructureError | NodeJS.ErrnoException} If tags.json cannot be read or parsed
  */
-export function parseIconTagMap(): IconsTagMap | undefined {
-  let repo: IconsTagMap;
-
+export function parseIconTagMap(): IconsTagMap {
   const repoPath = resolveTagsPath();
-  if (!repoPath) {
-    consola.error("  Cannot resolve tags path");
-    return;
-  }
-
   let rawRepo: string;
 
   try {
     rawRepo = readFileSync(repoPath, "utf-8");
   } catch (err) {
-    const error = err as { message?: string; code?: string };
-    const code = error.code ? ` (${error.code})` : "";
-    const message = error.message ? `: ${error.message}` : "";
-    consola.error(`  Cannot read Lucide tag map${code}${message}`);
-    return;
+    const error = err as NodeJS.ErrnoException;
+    throw new Error(`Cannot read tags.json: ${error.code ?? error.message}`);
   }
 
-  try {
-    repo = safeDestr<IconsTagMap>(rawRepo);
-  } catch (err) {
-    const error = err as { message?: string; code?: string };
-    const code = error.code ? ` (${error.code})` : "";
-    const message = error.message ? `: ${error.message}` : "";
-    const prefix =
-      err instanceof SyntaxError ? "Cannot parse Lucide tag map" : "Invalid Lucide tag map";
-    consola.error(`  ${prefix}${code}${message}`);
-    return;
-  }
+  const repo = safeDestr<IconsTagMap>(rawRepo);
 
   if (!repo || typeof repo !== "object" || Array.isArray(repo)) {
-    consola.error("  Lucide tag map is invalid; expected non-empty object of string arrays.");
-    return;
+    throw new InvalidTagMapStructureError(
+      "Lucide tag map is invalid; expected non-empty object of string arrays.",
+    );
   }
 
   const entries = Object.entries(repo);
@@ -161,8 +138,9 @@ export function parseIconTagMap(): IconsTagMap | undefined {
   );
 
   if (!entries.length || hasInvalidEntry) {
-    consola.error("  Lucide tag map is invalid; expected non-empty object of string arrays.");
-    return;
+    throw new InvalidTagMapStructureError(
+      "Lucide tag map is invalid; expected non-empty object of string arrays.",
+    );
   }
 
   return repo;
@@ -173,16 +151,12 @@ export function parseIconTagMap(): IconsTagMap | undefined {
  *
  * @param term - Tag to match (case-insensitive)
  * @param repo - Optional pre-parsed tag map; if omitted the function will attempt to load and parse the tag data
- * @returns An array of icon names that include the tag, or `undefined` if tag data cannot be loaded
+ * @returns An array of icon names that include the tag
+ * @throws {Error} If tag data cannot be loaded (when repo not provided)
  */
-export function findIconsByTag(term: string, repo?: IconsTagMap): Array<string> | undefined {
+export function findIconsByTag(term: string, repo?: IconsTagMap): Array<string> {
   if (repo === undefined) {
     repo = parseIconTagMap();
-  }
-
-  if (!repo) {
-    consola.error("  Unable to read Lucide tag data");
-    return;
   }
 
   const filtered = Object.entries(repo)
