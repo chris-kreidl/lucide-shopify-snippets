@@ -64,7 +64,7 @@ describe("addIcons", () => {
   test("creates snippets directory if it doesn't exist", async () => {
     mockExistsSync.mockImplementation(() => false);
 
-    await addIcons(["menu"], { dir: "snippets", prefix: "icon-", force: false });
+    await addIcons('mock', ["menu"], { dir: "snippets", prefix: "icon-", force: false });
 
     expect(mockMkdirSync).toHaveBeenCalled();
   });
@@ -74,7 +74,7 @@ describe("addIcons", () => {
       return path.endsWith("snippets");
     });
 
-    await addIcons(["menu"], { dir: "snippets", prefix: "icon-", force: false });
+    await addIcons('mock', ["menu"], { dir: "snippets", prefix: "icon-", force: false });
 
     expect(mockMkdirSync).not.toHaveBeenCalled();
   });
@@ -86,7 +86,7 @@ describe("addIcons", () => {
   test("writes snippet file for valid icon", async () => {
     mockExistsSync.mockImplementation(() => false);
 
-    await addIcons(["menu"], { dir: "snippets", prefix: "icon-", force: false });
+    await addIcons('mock', ["menu"], { dir: "snippets", prefix: "icon-", force: false });
 
     expect(mockWriteFileSync).toHaveBeenCalled();
     const call = mockWriteFileSync.mock.calls[0];
@@ -97,7 +97,7 @@ describe("addIcons", () => {
   test("uses custom prefix", async () => {
     mockExistsSync.mockImplementation(() => false);
 
-    await addIcons(["menu"], { dir: "snippets", prefix: "lucide-", force: false });
+    await addIcons('mock', ["menu"], { dir: "snippets", prefix: "lucide-", force: false });
 
     const call = mockWriteFileSync.mock.calls[0];
     expect(call?.[0]).toContain("lucide-menu.liquid");
@@ -106,7 +106,7 @@ describe("addIcons", () => {
   test("skips existing files without force flag", async () => {
     mockExistsSync.mockImplementation(() => true);
 
-    await addIcons(["menu"], { dir: "snippets", prefix: "icon-", force: false });
+    await addIcons('mock', ["menu"], { dir: "snippets", prefix: "icon-", force: false });
 
     expect(mockWriteFileSync).not.toHaveBeenCalled();
     expect(mockConsolaError).toHaveBeenCalled();
@@ -115,7 +115,7 @@ describe("addIcons", () => {
   test("overwrites existing files with force flag", async () => {
     mockExistsSync.mockImplementation(() => true);
 
-    await addIcons(["menu"], { dir: "snippets", prefix: "icon-", force: true });
+    await addIcons('mock', ["menu"], { dir: "snippets", prefix: "icon-", force: true });
 
     expect(mockWriteFileSync).toHaveBeenCalled();
   });
@@ -125,7 +125,7 @@ describe("addIcons", () => {
       throw new IconNotFoundError("this-icon-does-not-exist-12345");
     });
 
-    await addIcons(["this-icon-does-not-exist-12345"], {
+    await addIcons('mock', ["this-icon-does-not-exist-12345"], {
       dir: "snippets",
       prefix: "icon-",
       force: false,
@@ -138,7 +138,7 @@ describe("addIcons", () => {
   test("processes multiple icons", async () => {
     mockExistsSync.mockImplementation(() => false);
 
-    await addIcons(["menu", "arrow"], { dir: "snippets", prefix: "icon-", force: false });
+    await addIcons('mock', ["menu", "arrow"], { dir: "snippets", prefix: "icon-", force: false });
 
     expect(mockWriteFileSync).toHaveBeenCalledTimes(2);
   });
@@ -146,7 +146,7 @@ describe("addIcons", () => {
   test("logs summary with success count", async () => {
     mockExistsSync.mockImplementation(() => false);
 
-    await addIcons(["menu"], { dir: "snippets", prefix: "icon-", force: false });
+    await addIcons('mock', ["menu"], { dir: "snippets", prefix: "icon-", force: false });
 
     const calls = mockConsolaLog.mock.calls;
     const summaryCall = calls.find((call) => String(call?.[0]).includes("Done!"));
