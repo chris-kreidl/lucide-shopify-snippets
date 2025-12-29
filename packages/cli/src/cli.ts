@@ -13,6 +13,7 @@ program
 program
   .command("add")
   .description("Add icon snippet(s) to your Shopify theme")
+  .argument("<library>", "Icon library to use (e.g., lucide)")
   .argument("<icons...>", "Icon name(s) to add (e.g., menu chevron-down)")
   .option("-d, --dir <path>", "Snippets directory", "snippets")
   .option("-p, --prefix <prefix>", "Prefix for snippet filenames", "icon-")
@@ -22,10 +23,13 @@ program
 program
   .command("search")
   .description("Search Lucide library for icons")
+  .argument("<library>", "Icon library to use (e.g., lucide)")
   .argument("<term>", "Search term. Searches icon name if tag option not set")
   .option("-t, --tag", "Search tags")
   .action(searchIcons);
 
-program.command("tags").description("List available tags as provided by Lucide").action(listTags);
+program.command("tags")  
+  .argument("<library>", "Icon library to use (e.g., lucide)")
+  .description("List available tags as provided by Lucide").action(listTags);
 
 program.parse();

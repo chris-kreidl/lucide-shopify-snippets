@@ -16,9 +16,9 @@ interface SearchOptions {
  * @param options - Configuration for output:
  * - `tag`: when `true`, searches for icons tagged as specified term
  */
-export function searchIcons(term: string, options: SearchOptions): void {
+export function searchIcons(library: string, term: string, options: SearchOptions): void {
   try {
-    const iconset = getIconSet("lucide");
+    const iconset = getIconSet(library);
 
     if (options.tag) {
       const filtered = iconset.findIconsByTag(term);
