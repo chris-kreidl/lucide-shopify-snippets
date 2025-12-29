@@ -1,34 +1,18 @@
 import { join } from "path";
 import { IconSet } from "./IconSet";
-import { existsSync, readdirSync, readFileSync } from "fs";
+import { readFileSync } from "fs";
 import { safeDestr } from "destr";
 import type { IconsTagMap } from "./types";
-import { IconNotFoundError, InvalidTagMapStructureError } from "./errors";
+import { InvalidTagMapStructureError } from "./errors";
 import { alphabetical, flat, unique } from "radashi";
 
-export class Lucide extends IconSet {
+const variants = {
+  default: "icons",
+};
+
+export class Lucide extends IconSet<typeof variants> {
   constructor() {
-    super("lucide-static");
-  }
-
-  loadIcons() {
-    const iconsDir = join(this.packageDirectory, "icons");
-    if (!existsSync(iconsDir)) throw new Error("Could not find icons directory");
-
-    this.iconNames = readdirSync(iconsDir)
-      .filter((f) => f.endsWith(".svg"))
-      .map((f) => f.replace(".svg", ""));
-  }
-
-  getIcon(icon: string) {
-    if (!this.findExactMatch(icon)) {
-      throw new IconNotFoundError(icon);
-    }
-
-    const iconPath = join(this.packageDirectory, `icons/${icon}.svg`);
-    const svgContent = readFileSync(iconPath, "utf-8");
-
-    return this.extractPaths(svgContent);
+    super("lucide-static", variants, "default");
   }
 
   override supportsTags(): boolean {
@@ -56,10 +40,7 @@ export class Lucide extends IconSet {
 
     const entries = Object.entries(repo);
     const hasInvalidEntry = entries.some(
-      ([key, value]) =>
-        typeof key !== "string" ||
-        !Array.isArray(value) ||
-        value.some((tag) => typeof tag !== "string"),
+      ([, value]) => !Array.isArray(value) || value.some((tag) => typeof tag !== "string"),
     );
 
     if (!entries.length || hasInvalidEntry) {

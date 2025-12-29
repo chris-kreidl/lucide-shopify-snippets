@@ -1,20 +1,25 @@
 import { createRequire } from "module";
-import { dirname } from "path";
+import { dirname, join } from "path";
 import { similarity } from "radashi";
 import type { IconsTagMap } from "./types";
+import { existsSync, readdirSync, readFileSync } from "fs";
+import { UnknownIconVariantError } from "./errors";
 
-export abstract class IconSet {
+export abstract class IconSet<TVariants extends Record<string, string> = { default: string }> {
   packageDirectory: string;
   iconNames: Array<string> = [];
   tagNames: Array<string> = [];
   tagMap: IconsTagMap = {};
+  variants: TVariants;
+  defaultVariant: keyof TVariants;
 
-  abstract loadIcons(): void;
   abstract loadTags(): void;
-  abstract getIcon(icon: string): string;
 
-  constructor(packageName: string) {
+  constructor(packageName: string, variants: TVariants, defaultVariant: keyof TVariants & string) {
+    this.variants = variants;
+    this.defaultVariant = defaultVariant;
     this.packageDirectory = this.resolvePackageDirectory(packageName);
+
     this.loadIcons();
 
     if (this.supportsTags()) this.loadTags();
@@ -85,5 +90,47 @@ export abstract class IconSet {
   /* oxlint-disable-next-line no-unused-vars */
   findIconsByTag(tag: string): Array<string> {
     return [];
+  }
+
+  getDefaultVariant(): keyof TVariants {
+    return this.defaultVariant;
+  }
+
+  getVariantPath(variant?: keyof TVariants): string {
+    const v = variant ?? this.defaultVariant;
+    if (v in this.variants) {
+      return join(this.packageDirectory, this.variants[v]!);
+    } else {
+      throw new UnknownIconVariantError(`Unknown variant ${String(v)}`);
+    }
+  }
+
+  getIcon(icon: string, variant?: keyof TVariants): string {
+    const v = variant ?? this.defaultVariant;
+    const dir = this.getVariantPath(v);
+    const iconPath = join(dir, `${icon}.svg`);
+    let svgContent: string;
+
+    try {
+      svgContent = readFileSync(iconPath, "utf-8");
+    } catch (err) {
+      const error = err as NodeJS.ErrnoException;
+      throw new Error(`Cannot read icon "${icon}": ${error.code ?? error.message}`);
+    }
+
+    return this.extractPaths(svgContent);
+  }
+
+  getVariants(): Array<string> {
+    return Object.keys(this.variants);
+  }
+
+  loadIcons() {
+    const iconsDir = this.getVariantPath();
+    if (!existsSync(iconsDir)) throw new Error("Could not find icons directory");
+
+    this.iconNames = readdirSync(iconsDir)
+      .filter((f) => f.endsWith(".svg"))
+      .map((f) => f.replace(".svg", ""));
   }
 }
