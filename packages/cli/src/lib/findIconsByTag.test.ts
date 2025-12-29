@@ -74,89 +74,57 @@ describe("findIconsByTag error handling", () => {
     expect(result).toEqual([]);
   });
 
-  test("returns undefined and logs error when file read fails", () => {
+  test("throws when file read fails", () => {
     mockReadFileSync.mockImplementation(() => {
       const error = new Error("ENOENT: no such file or directory");
       (error as NodeJS.ErrnoException).code = "ENOENT";
       throw error;
     });
 
-    const result = findIconsByTag("arrow");
-
-    expect(result).toBeUndefined();
-    expect(mockConsolaError).toHaveBeenCalled();
-    const errorMessage = String(mockConsolaError.mock.calls[0]?.[0]);
-    expect(errorMessage).toContain("Cannot read Lucide tag map");
-    expect(errorMessage).toContain("ENOENT");
+    expect(() => { findIconsByTag("arrow") }).toThrow();
   });
 
-  test("returns undefined and logs error for invalid JSON", () => {
+  test("throws for invalid JSON", () => {
     mockReadFileSync.mockImplementation(() => "{ invalid json }");
 
-    const result = findIconsByTag("arrow");
-
-    expect(result).toBeUndefined();
-    expect(mockConsolaError).toHaveBeenCalled();
-    const errorMessage = String(mockConsolaError.mock.calls[0]?.[0]);
-    expect(errorMessage).toContain("Cannot parse Lucide tag map");
+    expect(() => { findIconsByTag("arrow") }).toThrow();
   });
 
-  test("returns undefined and logs error for null JSON", () => {
+  test("throws for null JSON", () => {
     mockReadFileSync.mockImplementation(() => "null");
 
-    const result = findIconsByTag("arrow");
-
-    expect(result).toBeUndefined();
-    expect(mockConsolaError).toHaveBeenCalled();
-    const errorMessage = String(mockConsolaError.mock.calls[0]?.[0]);
-    expect(errorMessage).toContain("invalid");
+    expect(() => { findIconsByTag("arrow") }).toThrow();
   });
 
-  test("returns undefined and logs error for array JSON", () => {
+  test("throws for array JSON", () => {
     mockReadFileSync.mockImplementation(() => "[]");
 
-    const result = findIconsByTag("arrow");
-
-    expect(result).toBeUndefined();
-    expect(mockConsolaError).toHaveBeenCalled();
-    const errorMessage = String(mockConsolaError.mock.calls[0]?.[0]);
-    expect(errorMessage).toContain("invalid");
+    expect(() => { findIconsByTag("arrow") }).toThrow();
   });
 
-  test("returns undefined and logs error for empty object", () => {
+  test("throws for empty object", () => {
     mockReadFileSync.mockImplementation(() => "{}");
 
-    const result = findIconsByTag("arrow");
-
-    expect(result).toBeUndefined();
-    expect(mockConsolaError).toHaveBeenCalled();
-    const errorMessage = String(mockConsolaError.mock.calls[0]?.[0]);
-    expect(errorMessage).toContain("invalid");
+    expect(() => { findIconsByTag("arrow") }).toThrow();
   });
 
-  test("returns undefined and logs error when tag values are not arrays", () => {
+  test("throws when tag values are not arrays", () => {
     mockReadFileSync.mockImplementation(() =>
       JSON.stringify({
         menu: "not-an-array",
       }),
     );
 
-    const result = findIconsByTag("arrow");
-
-    expect(result).toBeUndefined();
-    expect(mockConsolaError).toHaveBeenCalled();
+    expect(() => { findIconsByTag("arrow") }).toThrow();
   });
 
-  test("returns undefined and logs error when tag array contains non-strings", () => {
+  test("throws when tag array contains non-strings", () => {
     mockReadFileSync.mockImplementation(() =>
       JSON.stringify({
         menu: ["valid", 123, "also-valid"],
       }),
     );
 
-    const result = findIconsByTag("arrow");
-
-    expect(result).toBeUndefined();
-    expect(mockConsolaError).toHaveBeenCalled();
+    expect(() => { findIconsByTag("arrow") }).toThrow();
   });
 });
