@@ -4,14 +4,21 @@ import { getIconSet } from "../lib/iconsets";
 /**
  * Print available icon tags and the number of icons for each tag.
  *
+ * @param library - Icon library to search (e.g., "lucide", "heroicons")
+ *
  * If the icon-tag map cannot be parsed, an error is logged and the function returns early.
  *
  * Logs a header "Found the following tags:" followed by one line per tag in the format:
  * "    * <tag> [<n> icon(s)]".
  */
-export function listTags() {
+export function listTags(library: string) {
   try {
-    const iconset = getIconSet("lucide");
+    const iconset = getIconSet(library);
+
+    if (!iconset.supportsTags()) {
+      consola.warn(` ${library} does not provide tags`);
+      return;
+    }
 
     if (iconset.tagNames.length) {
       consola.log(`  Found the following tags:`);

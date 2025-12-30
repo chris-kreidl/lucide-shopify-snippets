@@ -12,13 +12,14 @@ interface SearchOptions {
  *
  * When `tag` option is specified, searches tag list for icons matching specified tag and logs a list of those icons.
  *
+ * @param library - Icon library to search (e.g., "lucide", "heroicons")
  * @param term - Search term
  * @param options - Configuration for output:
  * - `tag`: when `true`, searches for icons tagged as specified term
  */
-export function searchIcons(term: string, options: SearchOptions): void {
+export function searchIcons(library: string, term: string, options: SearchOptions): void {
   try {
-    const iconset = getIconSet("lucide");
+    const iconset = getIconSet(library);
 
     if (options.tag) {
       const filtered = iconset.findIconsByTag(term);

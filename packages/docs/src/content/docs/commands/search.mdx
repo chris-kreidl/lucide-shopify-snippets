@@ -1,6 +1,6 @@
 ---
 title: search
-description: Search for icons in the Lucide library
+description: Search for icons in the selected library
 ---
 
 import { Code } from '@astrojs/starlight/components';
@@ -9,13 +9,14 @@ The `search` command helps you find icons by name or tag.
 
 ## Usage
 
-<Code lang="bash" code="npx @ckreidl/lucide-shopify-snippets search <term> [options]" />
+<Code lang="bash" code="npx @ckreidl/sis search <library> <term> [options]" />
 
 ## Arguments
 
-| Argument | Description |
-| -------- | ----------- |
-| `term`   | Search term |
+| Argument  | Description       |
+| --------- | ----------------- |
+| `library` | Library of choice |
+| `term`    | Search term       |
 
 ## Options
 
@@ -27,7 +28,7 @@ The `search` command helps you find icons by name or tag.
 
 ### Search for an icon:
 
-<Code lang="bash" code="npx @ckreidl/lucide-shopify-snippets search arrow" />
+<Code lang="bash" code="npx @ckreidl/sis search lucide arrow" />
 
 Output:
 
@@ -37,7 +38,7 @@ The search uses fuzzy matching, so partial or misspelled names will still return
 
 ### Search tags:
 
-<Code lang="bash" code="npx @ckreidl/lucide-shopify-snippets search -t text" />
+<Code lang="bash" code="npx @ckreidl/sis search lucide -t text" />
 
 Output:
 

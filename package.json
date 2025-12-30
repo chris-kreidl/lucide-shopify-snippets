@@ -1,5 +1,5 @@
 {
-  "name": "lucide-shopify-snippets-monorepo",
+  "name": "sis-monorepo",
   "private": true,
   "workspaces": [
     "packages/*"

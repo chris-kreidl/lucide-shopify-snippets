@@ -1,11 +1,11 @@
-# @ckreidl/lucide-shopify-snippets
+# @ckreidl/sis
 
-Add [Lucide](https://lucide.dev) icon snippets to your Shopify theme.
+Add icon snippets from [Lucide](https://lucide.dev), [Heroicons](https://heroicons.com), and more to your Shopify theme.
 
 ## Usage
 
 ```bash
-npx @ckreidl/lucide-shopify-snippets add menu chevron-down arrow-right
+npx @ckreidl/sis add lucide menu chevron-down arrow-right
 ```
 
 This creates Liquid snippets in your `snippets` directory:
@@ -33,7 +33,7 @@ Use them in your theme:
 Add icon snippets to your theme:
 
 ```bash
-npx @ckreidl/lucide-shopify-snippets add <icons...> [options]
+npx @ckreidl/sis add <library> <icons...> [options]
 
 Options:
   -d, --dir <path>      Snippets directory (default: "snippets")
@@ -46,12 +46,29 @@ Options:
 Search for icons by name:
 
 ```bash
-npx @ckreidl/lucide-shopify-snippets search <icon>
+npx @ckreidl/sis search <library> <icon>
 ```
 
 Example:
 
 ```bash
-npx @ckreidl/lucide-shopify-snippets search arrow
+npx @ckreidl/sis search lucide arrow
 # Found similar: arrow-up, arrow-down, arrow-left, arrow-right, ...
+```
+
+### tags
+List available tags in the icon library:
+
+```bash
+npx @ckreidl/sis tags <library>
+```
+Example:
+
+```bash
+npx @ckreidl/sis tags lucide
+# accessibility [4 icons]
+# account [17 icons]
+# action [5 icons]
+# add [22 icons]
+# ...
 ```

@@ -3,15 +3,15 @@ import starlight from "@astrojs/starlight";
 
 export default defineConfig({
   site: "https://chris-kreidl.github.io",
-  base: "/lucide-shopify-snippets",
+  base: "/sis",
   integrations: [
     starlight({
-      title: "Lucide Shopify Snippets",
+      title: "Shopify Icon Snippets",
       logo: {
         src: "~/assets/logo.svg",
       },
       social: {
-        github: "https://github.com/chris-kreidl/lucide-shopify-snippets",
+        github: "https://github.com/chris-kreidl/sis",
       },
       sidebar: [
         {
@@ -19,6 +19,7 @@ export default defineConfig({
           items: [
             { label: "Introduction", slug: "getting-started/introduction" },
             { label: "Installation", slug: "getting-started/installation" },
+            { label: "Supported Libraries", slug: "getting-started/libraries" },
           ],
         },
         {

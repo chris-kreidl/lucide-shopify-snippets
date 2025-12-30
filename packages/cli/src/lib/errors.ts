@@ -24,3 +24,11 @@ export class UnknownIconSetError extends Error {
     this.name = "UnknownIconSetError";
   }
 }
+
+export class UnknownIconVariantError extends Error {
+  constructor(variant: string) {
+    super(`Unknown variant: ${variant}`);
+
+    this.name = "UnknownIconVariantError";
+  }
+}

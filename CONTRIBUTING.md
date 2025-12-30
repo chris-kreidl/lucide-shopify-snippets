@@ -21,7 +21,7 @@ bun install
 cd packages/cli
 
 # Run CLI directly
-bun run src/cli.ts add menu
+bun run src/cli.ts add lucide menu
 
 # Watch mode
 bun run dev

@@ -1,17 +1,25 @@
 ---
 title: tags
-description: List all available tags in the Lucide library
+description: List all available tags in the selected library
 ---
 
 import { Code } from '@astrojs/starlight/components';
 
-The `tags` command lists all available tags from the Lucide icon library, along with the number of icons associated with each tag.
+The `tags` command lists all available tags from the selected icon library, along with the number of icons associated with each tag.
 
-## Example
+## Usage
 
-<Code lang="bash" code="npx @ckreidl/lucide-shopify-snippets tags" />
+<Code lang="bash" code="npx @ckreidl/sis tags <library>" />
 
-Output (truncated):
+## Arguments
+
+| Argument  | Description       |
+| --------- | ----------------- |
+| `library` | Library of choice |
+
+## Output (truncated):
+
+Example output for the Lucide library:
 
 <Code lang="plaintext" code={`Found the following tags:
     * accessibility [4 icons]
@@ -26,4 +34,4 @@ Output (truncated):
 
 - Discover what categories of icons are available
 - Find the right tag to use with the `search --tag` command
-- Explore the Lucide icon library by category
+- Explore icon libraries by category

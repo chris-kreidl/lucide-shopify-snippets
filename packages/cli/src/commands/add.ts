@@ -16,13 +16,18 @@ interface AddOptions {
  *
  * Creates the target directory if missing, resolves each icon to its SVG source, generates a snippet file named with the provided prefix, skips unresolved icons (and logs up to five similar suggestions), and respects the `force` option when deciding whether to overwrite existing files. Logs progress and a summary of successes and failures.
  *
+ * @param library - Icon library to search (e.g., "lucide", "heroicons")
  * @param icons - Array of icon names to convert into snippet files
  * @param options - Configuration for output:
  *   - `dir`: target directory for generated snippets
  *   - `prefix`: filename prefix for each generated snippet
  *   - `force`: when `true`, overwrite existing files; otherwise skip existing files
  */
-export async function addIcons(icons: string[], options: AddOptions): Promise<void> {
+export async function addIcons(
+  library: string,
+  icons: string[],
+  options: AddOptions,
+): Promise<void> {
   try {
     const snippetsDir = join(process.cwd(), options.dir);
 
@@ -34,7 +39,7 @@ export async function addIcons(icons: string[], options: AddOptions): Promise<vo
 
     let successCount = 0;
     let errorCount = 0;
-    const iconset = getIconSet("lucide");
+    const iconset = getIconSet(library);
 
     for (const iconName of icons) {
       const start = performance.now();
