@@ -1,6 +1,6 @@
-# Lucide Shopify Snippets
+# Shopify Icon Snippets
 
-Add [Lucide](https://lucide.dev) icon snippets to your Shopify theme.
+Add icon snippets from [Lucide](https://lucide.dev), [Heroicons](https://heroicons.com), and more to your Shopify theme.
 
 ## Packages
 
