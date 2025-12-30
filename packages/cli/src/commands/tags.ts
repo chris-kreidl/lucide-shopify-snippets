@@ -11,7 +11,7 @@ import { getIconSet } from "../lib/iconsets";
  * Logs a header "Found the following tags:" followed by one line per tag in the format:
  * "    * <tag> [<n> icon(s)]".
  */
-export function listTags(library: string) {
+export function listTags(library: string): void {
   try {
     const iconset = getIconSet(library);
 

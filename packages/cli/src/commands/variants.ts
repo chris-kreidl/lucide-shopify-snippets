@@ -6,10 +6,10 @@ import { getIconSet } from "../lib/iconsets";
  *
  * @param library - Icon library to search (e.g., "lucide", "heroicons")
  *
- * Logs a header "Found the following variants:" followed by one line per tag in the format:
+ * Logs a header "Found the following variants:" followed by one line per variant in the format:
  * "    * <variant>".
  */
-export function listVariants(library: string) {
+export function listVariants(library: string): void {
   try {
     const iconset = getIconSet(library);
 
