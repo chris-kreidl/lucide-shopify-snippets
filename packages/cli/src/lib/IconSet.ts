@@ -101,7 +101,7 @@ export abstract class IconSet<TVariants extends Record<string, string> = { defau
     if (v in this.variants) {
       return join(this.packageDirectory, this.variants[v]!);
     } else {
-      throw new UnknownIconVariantError(`Unknown variant ${String(v)}`);
+      throw new UnknownIconVariantError(String(v));
     }
   }
 

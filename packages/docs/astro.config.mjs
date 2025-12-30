@@ -6,7 +6,7 @@ export default defineConfig({
   base: "/sis",
   integrations: [
     starlight({
-      title: "Lucide Shopify Snippets",
+      title: "Shopify Icon Snippets",
       logo: {
         src: "~/assets/logo.svg",
       },
