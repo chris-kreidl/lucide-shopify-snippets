@@ -1,0 +1,33 @@
+---
+title: variants
+description: List all available variants in the selected library
+---
+
+import { Code } from '@astrojs/starlight/components';
+
+The `variants` command lists all available variants from the selected icon library.
+
+## Usage
+
+<Code lang="bash" code="npx @ckreidl/sis variants <library>" />
+
+## Arguments
+
+| Argument  | Description       |
+| --------- | ----------------- |
+| `library` | Library of choice |
+
+## Output
+
+Example output for the Heroicons library:
+
+<Code lang="plaintext" code={`heroicons contains the following variants:
+  * 16/solid
+  * 20/solid
+  * 24/solid
+  * 24/outline
+  * default (24/outline)`} />
+
+Example output for the Lucide library:
+
+<Code lang="plaintext" code={`lucide contains only one variant: default`} />

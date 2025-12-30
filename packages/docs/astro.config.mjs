@@ -28,6 +28,7 @@ export default defineConfig({
             { label: "add", slug: "commands/add" },
             { label: "search", slug: "commands/search" },
             { label: "tags", slug: "commands/tags" },
+            { label: "variants", slug: "commands/variants" },
           ],
         },
       ],
