@@ -2,12 +2,13 @@ import consola from "consola";
 import { getIconSet } from "../lib/iconsets";
 
 /**
- * Print available icon variants
+ * List and print available variants for the specified icon library.
  *
- * @param library - Icon library to search (e.g., "lucide", "heroicons")
+ * Logs a header indicating whether the library contains only one variant or multiple variants,
+ * then prints each variant on its own indented line. For the "default" variant the associated
+ * value is shown in parentheses.
  *
- * Logs a header "Found the following variants:" followed by one line per variant in the format:
- * "    * <variant>".
+ * @param library - Icon library to inspect (for example "lucide" or "heroicons")
  */
 export function listVariants(library: string): void {
   try {
