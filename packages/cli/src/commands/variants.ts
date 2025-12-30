@@ -14,17 +14,17 @@ export function listVariants(library: string): void {
     const iconset = getIconSet(library);
 
     if (Object.keys(iconset.variants).length === 1) {
-      console.log(`${library} contains only one variant: ${Object.keys(iconset.variants)[0]}`);
+      consola.log(`  ${library} contains only one variant: ${Object.keys(iconset.variants)[0]}`);
       return;
     }
 
-    console.log(`${library} contains the following variants:`);
+    consola.log(`  ${library} contains the following variants:`);
 
-    Object.entries(iconset.variants).map(([k, _v]) => {
+    Object.entries(iconset.variants).forEach(([k, _v]) => {
       if (k === "default") {
-        console.log(`  * ${k} (${iconset.variants.default})`);
+        consola.log(`    * ${k} (${iconset.variants.default})`);
       } else {
-        console.log(`  * ${k}`);
+        consola.log(`    * ${k}`);
       }
     });
   } catch (err) {
