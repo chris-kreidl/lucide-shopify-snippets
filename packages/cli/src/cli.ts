@@ -4,6 +4,7 @@ import { addIcons } from "./commands/add.ts";
 import { searchIcons } from "./commands/search.ts";
 import { version } from "../package.json";
 import { listTags } from "./commands/tags.ts";
+import { listVariants } from "./commands/variants.ts";
 
 program.name("sis").description("Add icon library snippets to your Shopify theme").version(version);
 
@@ -30,5 +31,11 @@ program
   .argument("<library>", "Icon library to use (e.g., lucide)")
   .description("List available tags as provided by the icon library")
   .action(listTags);
+
+program
+  .command("variants")
+  .argument("<library>", "Icon library to use (e.g., lucide)")
+  .description("List available variants from the icon library")
+  .action(listVariants);
 
 program.parse();

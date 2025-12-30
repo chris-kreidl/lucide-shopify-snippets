@@ -77,7 +77,9 @@ export async function addIcons(
 
         writeFileSync(outputPath, snippet);
         const duration = performance.now() - start;
-        consola.log(`✅ [${duration.toFixed(2)} ms] ${options.prefix}${iconName}.liquid`);
+        consola.log(
+          `✅ [${duration.toFixed(2)} ms] (${iconset.variants[iconset.variant]}) ${options.prefix}${iconName}.liquid`,
+        );
         successCount++;
       } catch (error) {
         consola.error(`Error processing "${iconName}":`, error);
