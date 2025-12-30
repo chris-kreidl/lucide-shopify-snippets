@@ -12,16 +12,14 @@ interface AddOptions {
 }
 
 /**
- * Convert a list of icon names into Liquid snippet files in the specified directory.
+ * Generate Liquid snippet files from a list of icon names into a target directory.
  *
- * Creates the target directory if missing, resolves each icon to its SVG source, generates a snippet file named with the provided prefix, skips unresolved icons (and logs up to five similar suggestions), and respects the `force` option when deciding whether to overwrite existing files. Logs progress and a summary of successes and failures.
- *
- * @param library - Icon library to search (e.g., "lucide", "heroicons")
- * @param icons - Array of icon names to convert into snippet files
- * @param options - Configuration for output:
- *   - `dir`: target directory for generated snippets
- *   - `prefix`: filename prefix for each generated snippet
- *   - `force`: when `true`, overwrite existing files; otherwise skip existing files
+ * @param library - Icon library identifier (for example, "lucide" or "heroicons")
+ * @param icons - Icon names to convert into snippet files
+ * @param options - Output configuration
+ * @param options.dir - Target directory (relative to cwd) for generated snippets
+ * @param options.prefix - Filename prefix to prepend to each generated snippet (e.g., "icon-")
+ * @param options.force - When `true`, overwrite existing files; when `false`, skip files that already exist
  */
 export async function addIcons(
   library: string,
@@ -77,7 +75,9 @@ export async function addIcons(
 
         writeFileSync(outputPath, snippet);
         const duration = performance.now() - start;
-        consola.log(`✅ [${duration.toFixed(2)} ms] ${options.prefix}${iconName}.liquid`);
+        consola.log(
+          `✅ [${duration.toFixed(2)} ms] (${iconset.variants[iconset.variant]}) ${options.prefix}${iconName}.liquid`,
+        );
         successCount++;
       } catch (error) {
         consola.error(`Error processing "${iconName}":`, error);

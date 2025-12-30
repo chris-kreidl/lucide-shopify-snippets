@@ -11,13 +11,13 @@ export abstract class IconSet<TVariants extends Record<string, string> = { defau
   tagNames: Array<string> = [];
   tagMap: IconsTagMap = {};
   variants: TVariants;
-  defaultVariant: keyof TVariants;
+  variant: keyof TVariants;
 
   abstract loadTags(): void;
 
-  constructor(packageName: string, variants: TVariants, defaultVariant: keyof TVariants & string) {
+  constructor(packageName: string, variants: TVariants, variant: keyof TVariants & string) {
     this.variants = variants;
-    this.defaultVariant = defaultVariant;
+    this.variant = variant;
     this.packageDirectory = this.resolvePackageDirectory(packageName);
 
     this.loadIcons();
@@ -92,12 +92,8 @@ export abstract class IconSet<TVariants extends Record<string, string> = { defau
     return [];
   }
 
-  getDefaultVariant(): keyof TVariants {
-    return this.defaultVariant;
-  }
-
   getVariantPath(variant?: keyof TVariants): string {
-    const v = variant ?? this.defaultVariant;
+    const v = variant ?? this.variant;
     if (v in this.variants) {
       return join(this.packageDirectory, this.variants[v]!);
     } else {
@@ -106,7 +102,7 @@ export abstract class IconSet<TVariants extends Record<string, string> = { defau
   }
 
   getIcon(icon: string, variant?: keyof TVariants): string {
-    const v = variant ?? this.defaultVariant;
+    const v = variant ?? this.variant;
     const dir = this.getVariantPath(v);
     const iconPath = join(dir, `${icon}.svg`);
     let svgContent: string;

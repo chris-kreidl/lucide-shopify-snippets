@@ -9,14 +9,15 @@ The `add` command generates Liquid snippet files for the specified icons.
 
 ## Usage
 
-<Code lang="bash" code="npx @ckreidl/sis add <library> <icons...> [options]" />
+<Code lang="bash" code="npx @ckreidl/sis add <library>[:<variant>] <icons...> [options]" />
 
 ## Arguments
 
-| Argument  | Description                                           |
-| --------- | ----------------------------------------------------- |
-| `library` | Desired icon library                                  |
-| `icons`   | One or more icon names (e.g., `menu`, `chevron-down`) |
+| Argument  | Description                                                |
+| --------- | ---------------------------------------------------------- |
+| `library` | Desired icon library                                       |
+| `variant` | Optional. Desired icon variant, if library offers variants |
+| `icons`   | One or more icon names (e.g., `menu`, `chevron-down`)      |
 
 ## Options
 
@@ -39,6 +40,10 @@ Add multiple icons:
 Custom output directory:
 
 <Code lang="bash" code="npx @ckreidl/sis add lucide menu --dir theme/snippets" />
+
+Specify variant:
+
+<Code lang="bash" code="npx @ckreidl/sis add heroicons:16/solid arrow-down" />
 
 Custom prefix:
 

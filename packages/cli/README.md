@@ -33,12 +33,19 @@ Use them in your theme:
 Add icon snippets to your theme:
 
 ```bash
-npx @ckreidl/sis add <library> <icons...> [options]
+npx @ckreidl/sis add <library>:<variant> <icons...> [options]
 
 Options:
   -d, --dir <path>      Snippets directory (default: "snippets")
   -p, --prefix <prefix> Prefix for snippet filenames (default: "icon-")
   -f, --force           Overwrite existing snippets
+```
+
+Example:
+
+```bash
+npx @ckreidl/sis add lucide menu chevron-down arrow-right
+npx @ckreidl/sis add heroicons:24/solid user search
 ```
 
 ### search
@@ -73,4 +80,24 @@ npx @ckreidl/sis tags lucide
 # action [5 icons]
 # add [22 icons]
 # ...
+```
+
+### variants
+
+List available variants in the icon library:
+
+```bash
+npx @ckreidl/sis variants <library>
+```
+
+Example:
+
+```bash
+npx @ckreidl/sis variants heroicons
+# heroicons contains the following variants:
+#   * 16/solid
+#   * 20/solid
+#   * 24/solid
+#   * 24/outline
+#   * default (24/outline)
 ```
