@@ -57,11 +57,13 @@ npx @ckreidl/sis search lucide arrow
 ```
 
 ### tags
+
 List available tags in the icon library:
 
 ```bash
 npx @ckreidl/sis tags <library>
 ```
+
 Example:
 
 ```bash
