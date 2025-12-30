@@ -1,6 +1,6 @@
 {
   "name": "@ckreidl/sis",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "CLI to import icon library icons as Liquid snippets to Shopify themes",
   "keywords": [
     "cli",
