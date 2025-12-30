@@ -3,7 +3,7 @@ import starlight from "@astrojs/starlight";
 
 export default defineConfig({
   site: "https://chris-kreidl.github.io",
-  base: "/sis",
+  base: "/shopify-icon-snippets",
   integrations: [
     starlight({
       title: "Shopify Icon Snippets",
@@ -11,7 +11,7 @@ export default defineConfig({
         src: "~/assets/logo.svg",
       },
       social: {
-        github: "https://github.com/chris-kreidl/sis",
+        github: "https://github.com/chris-kreidl/shopify-icon-snippets",
       },
       sidebar: [
         {
