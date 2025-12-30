@@ -2,10 +2,6 @@
   "name": "@ckreidl/sis",
   "version": "0.3.1",
   "description": "CLI to import icon library icons as Liquid snippets to Shopify themes",
-  "repository": {
-    "url": "https://github.com/chris-kreidl/shopify-icon-snippets",
-    "type": "git"
-  },
   "keywords": [
     "cli",
     "icons",
@@ -15,7 +11,11 @@
     "snippets"
   ],
   "license": "MIT",
-  "author": "",
+  "author": "Chris Kreidl chris.kreidl@protonmail.ch",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chris-kreidl/shopify-icon-snippets"
+  },
   "bin": {
     "sis": "dist/cli.js"
   },
