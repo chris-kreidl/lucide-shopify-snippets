@@ -23,7 +23,11 @@ interface AddOptions {
  *   - `prefix`: filename prefix for each generated snippet
  *   - `force`: when `true`, overwrite existing files; otherwise skip existing files
  */
-export async function addIcons(library: string, icons: string[], options: AddOptions): Promise<void> {
+export async function addIcons(
+  library: string,
+  icons: string[],
+  options: AddOptions,
+): Promise<void> {
   try {
     const snippetsDir = join(process.cwd(), options.dir);
 

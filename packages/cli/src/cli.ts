@@ -5,10 +5,7 @@ import { searchIcons } from "./commands/search.ts";
 import { version } from "../package.json";
 import { listTags } from "./commands/tags.ts";
 
-program
-  .name("lucide-shopify-snippets")
-  .description("Add icon library snippets to your Shopify theme")
-  .version(version);
+program.name("sis").description("Add icon library snippets to your Shopify theme").version(version);
 
 program
   .command("add")
@@ -28,8 +25,10 @@ program
   .option("-t, --tag", "Search tags")
   .action(searchIcons);
 
-program.command("tags")  
+program
+  .command("tags")
   .argument("<library>", "Icon library to use (e.g., lucide)")
-  .description("List available tags as provided by the icon library").action(listTags);
+  .description("List available tags as provided by the icon library")
+  .action(listTags);
 
 program.parse();

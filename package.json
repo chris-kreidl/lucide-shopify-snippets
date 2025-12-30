@@ -1,12 +1,9 @@
 {
-  "name": "lucide-shopify-snippets-monorepo",
-  "devDependencies": {
-    "oxfmt": "^0.20.0",
-    "oxlint": "^1.35.0",
-    "oxlint-tsgolint": "^0.10.0",
-    "typescript": "^5.9.3"
-  },
+  "name": "sis-monorepo",
   "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "build": "bun run --filter '*' build",
     "check": "bun run --filter '*' check",
@@ -15,7 +12,10 @@
     "lint": "oxlint --type-aware",
     "test": "bun test"
   },
-  "workspaces": [
-    "packages/*"
-  ]
+  "devDependencies": {
+    "oxfmt": "^0.20.0",
+    "oxlint": "^1.35.0",
+    "oxlint-tsgolint": "^0.10.0",
+    "typescript": "^5.9.3"
+  }
 }

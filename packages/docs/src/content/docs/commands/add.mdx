@@ -9,13 +9,14 @@ The `add` command generates Liquid snippet files for the specified icons.
 
 ## Usage
 
-<Code lang="bash" code="npx @ckreidl/lucide-shopify-snippets add <icons...> [options]" />
+<Code lang="bash" code="npx @ckreidl/sis <library> add <icons...> [options]" />
 
 ## Arguments
 
-| Argument | Description                                           |
-| -------- | ----------------------------------------------------- |
-| `icons`  | One or more icon names (e.g., `menu`, `chevron-down`) |
+| Argument  | Description                                           |
+| --------- | ----------------------------------------------------- |
+| `library` | Desired icon library                                  |
+| `icons`   | One or more icon names (e.g., `menu`, `chevron-down`) |
 
 ## Options
 
@@ -29,19 +30,19 @@ The `add` command generates Liquid snippet files for the specified icons.
 
 Add a single icon:
 
-<Code lang="bash" code="npx @ckreidl/lucide-shopify-snippets add menu" />
+<Code lang="bash" code="npx @ckreidl/sis lucide add menu" />
 
 Add multiple icons:
 
-<Code lang="bash" code="npx @ckreidl/lucide-shopify-snippets add menu chevron-down arrow-right" />
+<Code lang="bash" code="npx @ckreidl/sis lucide add menu chevron-down arrow-right" />
 
 Custom output directory:
 
-<Code lang="bash" code="npx @ckreidl/lucide-shopify-snippets add menu --dir theme/snippets" />
+<Code lang="bash" code="npx @ckreidl/sis lucide add menu --dir theme/snippets" />
 
 Custom prefix:
 
-<Code lang="bash" code="npx @ckreidl/lucide-shopify-snippets add menu --prefix lucide-
+<Code lang="bash" code="npx @ckreidl/sis lucide add menu --prefix lucide-
 # Creates: lucide-menu.liquid" />
 
 ## Generated Snippet

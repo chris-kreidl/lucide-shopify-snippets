@@ -1,7 +1,7 @@
 {
-  "name": "@ckreidl/lucide-shopify-snippets",
+  "name": "@ckreidl/sis",
   "version": "0.2.0",
-  "description": "CLI to add Lucide icon snippets to Shopify themes",
+  "description": "CLI to import icon library icons as Liquid snippets to Shopify themes",
   "keywords": [
     "cli",
     "icons",
@@ -13,7 +13,7 @@
   "license": "MIT",
   "author": "",
   "bin": {
-    "lucide-shopify-snippets": "dist/cli.js"
+    "sis": "dist/cli.js"
   },
   "files": [
     "dist"
