@@ -12,7 +12,7 @@ Add [Lucide](https://lucide.dev) icon snippets to your Shopify theme.
 ## Quick Start
 
 ```bash
-npx @ckreidl/sis lucide add menu chevron-down
+npx @ckreidl/sis add lucide menu chevron-down
 ```
 
 See the [CLI README](./packages/cli/README.md) for full usage.

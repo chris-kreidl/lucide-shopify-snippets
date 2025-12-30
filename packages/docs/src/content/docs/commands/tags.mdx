@@ -5,11 +5,11 @@ description: List all available tags in the selected library
 
 import { Code } from '@astrojs/starlight/components';
 
-The `tags` command lists all available tags from the Lucide icon library, along with the number of icons associated with each tag.
+The `tags` command lists all available tags from the selected icon library, along with the number of icons associated with each tag.
 
 ## Usage
 
-<Code lang="bash" code="npx @ckreidl/sis <library> tags" />
+<Code lang="bash" code="npx @ckreidl/sis tags <library>" />
 
 ## Arguments
 
@@ -18,6 +18,8 @@ The `tags` command lists all available tags from the Lucide icon library, along 
 | `library` | Library of choice |
 
 ## Output (truncated):
+
+Example output for the Lucide library:
 
 <Code lang="plaintext" code={`Found the following tags:
     * accessibility [4 icons]
